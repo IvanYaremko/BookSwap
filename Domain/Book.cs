@@ -1,4 +1,7 @@
 namespace Domain;
+/// <summary>
+/// This is class is the blueprint for all Book objects.
+/// </summary>
 public class Book{
     public Guid Id { get; set; }
     public string? Title { get; set; }
