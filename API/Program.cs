@@ -1,15 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using API.Extensions;
+using FluentValidation.AspNetCore;
+using Application.Books;
+using API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllers();
+                                // Only need to specify on class that resides in the Application.csproj to pick up all validation handlers  
+builder.Services.AddControllers().AddFluentValidation(config =>
+{
+    config.RegisterValidatorsFromAssemblyContaining<Create>();
+});
 builder.Services.AddApplicationServices(builder.Configuration);
 var app = builder.Build();
-
+// Custom exception handling middleware
+app.UseMiddleware<ExceptionMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
