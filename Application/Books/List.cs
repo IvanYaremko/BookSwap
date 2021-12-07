@@ -13,9 +13,9 @@ namespace Application.Books
     /// </summary>
     public class List
     {
-        public class Query : IRequest<List<Book>> { }
+        public class Query : IRequest<Result<List<Book>>> { }
 
-        public class Handler : IRequestHandler<Query, List<Book>>
+        public class Handler : IRequestHandler<Query, Result<List<Book>>>
         {
             private readonly DataContext _context;
             public Handler(DataContext context)
@@ -23,9 +23,17 @@ namespace Application.Books
                 _context = context;
             }
 
-            public async Task<List<Book>> Handle(Query request, CancellationToken cancellationToken)
+            /// <summary>
+            ///  This method contains the logic which "handles" the request.
+            ///  The method utilises the Result class for error handling. This is done by querying the database for all books 
+            ///  and returning it the Results generic type Value - the API controller returns the appropriate request.
+            /// </summary>
+            /// <param name="request">The object send by the query</param>
+            /// <param name="cancellationToken">Used to cancell prolonged requests</param>
+            /// <returns>A Result object containing either a book object retrieved from the database or null</returns>
+            public async Task<Result<List<Book>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _context.Books.ToListAsync();
+                return Result<List<Book>>.Success(await _context.Books.ToListAsync());
             }
         }
     }
