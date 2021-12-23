@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Container } from 'semantic-ui-react';
 import { Book } from '../models/Book';
 import NavBar from './NavBar';
 import BookDashboard from '../../features/dashboard/BookDashboard';
 import {v4 as uuid} from 'uuid'
+import agent from '../api/agent';
+import LoadingComponent from './LoadingComponent';
 
 function App() {
   const [books, setBooks] = useState<Book[]>([])
   const [selectedBook, setSelectedBook] = useState<Book | undefined>(undefined)
   const [editMode, setEditMode] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/books').then(response => {
-      console.log(response)
-      setBooks(response.data)
+    agent.Books.list().then(response => {
+      setBooks(response)
+      setLoading(false)
     })
   }, [])
 
@@ -36,16 +39,34 @@ function App() {
   }
 
   function handleCreateOrEditBook(book: Book) {
-    book.id ? setBooks([...books.filter(x => x.id !== book.id), book])
-      : setBooks([...books, {...book, id: uuid()}])
-    
-    setEditMode(false)
-    setSelectedBook(book)
+    setSubmitting(true)
+    if (book.id) {
+      agent.Books.update(book).then(() => {
+        setBooks([...books.filter(x => x.id !== book.id), book])
+        setSelectedBook(book)
+        setEditMode(false)
+        setSubmitting(false)
+      })
+    } else {
+      book.id = uuid()
+      agent.Books.create(book).then(() => {
+        setBooks([...books, book])
+        setSelectedBook(book)
+        setEditMode(false)
+        setSubmitting(false)
+      })
+    }
   }
 
   function handleDeleteBook(id: string) {
-    setBooks([...books.filter(x => x.id !== id)])
+    setSubmitting(true)
+    agent.Books.delete(id).then(() => {
+      setBooks([...books.filter(x => x.id !== id)])
+      setSubmitting(false)
+    })
   }
+
+  if(loading) return <LoadingComponent content='loading app' />
 
   return (
     <>
@@ -61,6 +82,7 @@ function App() {
           closeForm={handleFormClose}
           createOrEdit={handleCreateOrEditBook}
           deleteBook={handleDeleteBook}
+          submitting={submitting}
         />
       </Container>
     </>
