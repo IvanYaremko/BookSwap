@@ -1,51 +1,29 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { Grid } from "semantic-ui-react";
-import { Book } from "../../app/models/Book";
+import { useStore } from "../../app/stores/Store";
 import BookDetails from "../details/BookDetails";
 import BookForm from "../form/BookForm";
 import BookList from "./BookList";
 
-interface Props {
-    books: Book[]
-    selectedBook: Book | undefined
-    selectBook: (id: string) => void
-    cancelSelectBook: () => void
-    editMode: boolean;
-    openForm: (id: string) => void
-    closeForm: () => void
-    createOrEdit: (book: Book) => void
-    deleteBook: (id: string) => void
-    submitting: boolean
-}
 
-export default function BookDashboard(
-    { books, selectBook, selectedBook, cancelSelectBook, editMode, openForm, closeForm, createOrEdit, deleteBook, submitting }: Props) {
+export default observer(function BookDashboard() {
+    const { bookStore } = useStore()
+    const {selectedBook, editMode} = bookStore
+    
     return (
         <>
             <Grid>
                 <Grid.Column width='8'>
-                    <BookList
-                        books={books}
-                        selectBook={selectBook}
-                        deleteBook={deleteBook}    
-                        submitting={submitting}
-                    />
+                    <BookList/>
                 </Grid.Column>
                 <Grid.Column width='6'>
                     {selectedBook && !editMode &&
-                        <BookDetails
-                            book={selectedBook}
-                            cancelSelectBook={cancelSelectBook}
-                            openForm={openForm}/>}
+                        <BookDetails />}
                     {editMode && 
-                        <BookForm
-                            closeForm={closeForm}
-                            book={selectedBook}
-                            createOrEdit={createOrEdit}
-                            submitting={submitting}
-                        />}
+                        <BookForm/>}
                 </Grid.Column>
             </Grid>
         </>
     )
-}
+})

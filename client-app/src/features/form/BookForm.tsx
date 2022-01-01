@@ -1,15 +1,12 @@
+import { observer } from "mobx-react-lite";
 import React, { ChangeEvent, useState } from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
-import { Book } from "../../app/models/Book";
+import { useStore } from "../../app/stores/Store";
 
-interface Props {
-    book: Book | undefined
-    closeForm: () => void
-    createOrEdit: (book: Book) => void
-    submitting: boolean
-}
 
-export default function BookForm({ book: selectedBook, closeForm, createOrEdit, submitting }: Props) {
+export default observer(function BookForm() {
+    const { bookStore } = useStore()
+    const {selectedBook, closeForm, createBook, updateBook, loading} = bookStore
     
     const initialState = selectedBook ?? {
         id: "",
@@ -25,7 +22,7 @@ export default function BookForm({ book: selectedBook, closeForm, createOrEdit, 
     const [book, setBook] = useState(initialState)
 
     function handleSubmit() {
-        createOrEdit(book)
+        book.id ? updateBook(book) : createBook(book)
     }
 
     function handleInputChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -43,9 +40,9 @@ export default function BookForm({ book: selectedBook, closeForm, createOrEdit, 
                 <Form.Input placeholder='Pages' value={book.pages} name='pages' onChange={handleInputChange} />
                 <Form.Input placeholder='Binding' value={book.binding} name='binding' onChange={handleInputChange} />
                 <Form.Input placeholder='isbn13' value={book.isbn13} name='isbn13' onChange={handleInputChange} />
-                <Button loading={submitting} floated='right' positive type='submit' content='submit' />
+                <Button loading={loading} floated='right' positive type='submit' content='submit' />
                 <Button onClick={closeForm} floated='right' type='button' content='cancel' />
             </Form>
         </Segment>
     )
-}
+})

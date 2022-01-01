@@ -1,16 +1,16 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { Button, Card, Image } from "semantic-ui-react";
-import { Book } from "../../app/models/Book";
+import LoadingComponent from "../../app/layout/LoadingComponent";
+import { useStore } from "../../app/stores/Store";
 
-interface Props{
-    book: Book
-    cancelSelectBook: () => void
-    openForm: (id: string) => void
-}
 
-export default function BookDetails({book, cancelSelectBook, openForm}: Props) {
+export default observer(function BookDetails() {
+    const { bookStore } = useStore()
+    const {selectedBook: book, openForm, cancelSelectedBook} = bookStore
+
+    if(!book) return <LoadingComponent/>
     return (
-        
             <Card>
                 <Image src='https://react.semantic-ui.com/images/wireframe/image.png' />
                 <Card.Content>
@@ -28,10 +28,10 @@ export default function BookDetails({book, cancelSelectBook, openForm}: Props) {
                 <Card.Content extra>
                     <Button.Group widths='2'>
                         <Button onClick={() => openForm(book.id)} basic color='blue' content='Edit' />
-                        <Button onClick={cancelSelectBook} color='grey' content='Cancel' />
+                        <Button onClick={cancelSelectedBook} color='grey' content='Cancel' />
                    </Button.Group>
                 </Card.Content>
             </Card>
         
     )
-}
+})
