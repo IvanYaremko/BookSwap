@@ -1,16 +1,13 @@
+import { observer } from "mobx-react-lite";
 import React, { SyntheticEvent, useState } from "react";
 import { Button, Item, Segment } from "semantic-ui-react";
-import { Book } from "../../app/models/Book";
+import { useStore } from "../../app/stores/Store";
 
-interface Props {
-    books: Book[]
-    selectBook: (id: string) => void
-    deleteBook: (id: string) => void
-    submitting: boolean
-}
 
-export default function BookList({ books, selectBook, deleteBook, submitting }: Props) {
+export default observer(function BookList() {
     const [target, setTarget] = useState('')
+    const { bookStore } = useStore()
+    const {deleteBook, books, loading} = bookStore
 
     function handleBookDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
         setTarget(e.currentTarget.name)
@@ -31,10 +28,10 @@ export default function BookList({ books, selectBook, deleteBook, submitting }: 
                                 <Item.Header as='a'>{book.title}</Item.Header>
                                 <Item.Content> {book.author} </Item.Content>
                             </Item.Content>
-                            <Button onClick={() => selectBook(book.id)} floated='right' color='blue' content='view' />
+                            <Button onClick={() => bookStore.selectBook(book.id)} floated='right' color='blue' content='view' />
                             <Button
                                 name={book.id}
-                                loading={submitting && target === book.id}
+                                loading={loading && target === book.id}
                                 onClick={(e) => handleBookDelete(e, book.id)}
                                 floated='right'
                                 color='red'
@@ -47,4 +44,4 @@ export default function BookList({ books, selectBook, deleteBook, submitting }: 
             </Segment>
         </>
     )
-}
+})
