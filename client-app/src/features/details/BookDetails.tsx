@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import { Button, Card, Image } from "semantic-ui-react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useStore } from "../../app/stores/Store";
@@ -7,9 +8,14 @@ import { useStore } from "../../app/stores/Store";
 
 export default observer(function BookDetails() {
     const { bookStore } = useStore()
-    const {selectedBook: book, openForm, cancelSelectedBook} = bookStore
+    const { selectedBook: book, loadBook, loadingInitial } = bookStore
+    const { id } = useParams<{ id: string }>()
+    
+    useEffect(() => {
+        if (id) loadBook(id)
+    }, [id, loadBook])
 
-    if(!book) return <LoadingComponent/>
+    if(loadingInitial || !book) return <LoadingComponent/>
     return (
             <Card>
                 <Image src='https://react.semantic-ui.com/images/wireframe/image.png' />
@@ -27,8 +33,8 @@ export default observer(function BookDetails() {
                 </Card.Content>
                 <Card.Content extra>
                     <Button.Group widths='2'>
-                        <Button onClick={() => openForm(book.id)} basic color='blue' content='Edit' />
-                        <Button onClick={cancelSelectedBook} color='grey' content='Cancel' />
+                        <Button as={Link} to={`/edit/${book.id}`}  basic color='blue' content='Edit' />
+                        <Button as={Link} to={`/books`} color='grey' content='Cancel' />
                    </Button.Group>
                 </Card.Content>
             </Card>

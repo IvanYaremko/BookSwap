@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { SyntheticEvent, useState } from "react";
+import { Link } from "react-router-dom";
 import { Button, Item, Segment } from "semantic-ui-react";
 import { useStore } from "../../app/stores/Store";
 
@@ -28,7 +29,7 @@ export default observer(function BookList() {
                                 <Item.Header as='a'>{book.title}</Item.Header>
                                 <Item.Content> {book.author} </Item.Content>
                             </Item.Content>
-                            <Button onClick={() => bookStore.selectBook(book.id)} floated='right' color='blue' content='view' />
+                            <Button as={Link} to={`/books/${book.id}`} floated='right' color='blue' content='view' />
                             <Button
                                 name={book.id}
                                 loading={loading && target === book.id}
