@@ -27,6 +27,7 @@ export default observer(function BookForm() {
         binding: "",
         isbn13: "",
         image: "",
+        county: "carlow"
     })
 
     const validationSchema = Yup.object({

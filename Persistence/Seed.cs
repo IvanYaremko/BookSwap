@@ -16,11 +16,15 @@ namespace Persistence
                 {
                     Author = "Jane",
                     Title = "Test Book 1",
+                    Pages = 1,
+                    County ="carlow"
                 },
                 new Book
                 {
                     Author = "Phil",
                     Title = "Test book 2",
+                    Pages = 1,
+                    County = "carlow"
                 }
             };
              await context.Books.AddRangeAsync(books);
