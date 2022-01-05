@@ -1,10 +1,15 @@
 import { observer } from "mobx-react-lite";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { Button, Form, Segment } from "semantic-ui-react";
+import { Button, Header, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useStore } from "../../app/stores/Store";
-import {v4 as uuid} from 'uuid'
+import { v4 as uuid } from 'uuid'
+import { Formik, Form } from "formik";
+import { Book } from "../../app/models/Book";
+import * as Yup from 'yup';
+import CustomTextInput from "../../app/common/form/CustomTextInput";
+import CustomTextArea from "../../app/common/form/CustomTextArea";
 
 
 
@@ -12,8 +17,8 @@ export default observer(function BookForm() {
     const history = useHistory()
     const { bookStore } = useStore()
     const { createBook, updateBook, loading, loadBook, loadingInitial } = bookStore
-    const {id} = useParams<{id: string}>()
-    const [book, setBook] = useState({
+    const { id } = useParams<{ id: string }>()
+    const [book, setBook] = useState<Book>({
         id: "",
         title: "",
         author: "",
@@ -24,11 +29,20 @@ export default observer(function BookForm() {
         image: "",
     })
 
+    const validationSchema = Yup.object({
+        title: Yup.string().required(),
+        author: Yup.string().required(),
+        synopsys: Yup.string().required(),
+        pages: Yup.number().required(),
+        binding: Yup.string().required(),
+        isbn13: Yup.string().required(),
+    })
+
     useEffect(() => {
-        if(id) loadBook(id).then(book => setBook(book!))
+        if (id) loadBook(id).then(book => setBook(book!))
     }, [id, loadBook])
 
-    function handleSubmit() {
+    function handleFormSubmit(book: Book) {
         if (book.id.length === 0) {
             let newBook = {
                 ...book,
@@ -40,26 +54,39 @@ export default observer(function BookForm() {
         }
     }
 
-    function handleInputChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-        const { name, value } = event.target
-        setBook({...book, [name]: value})
-    }
 
-    if(loadingInitial) return <LoadingComponent content="Loading book..." />
+    if (loadingInitial) return <LoadingComponent content="Loading book..." />
 
     return (
         <Segment clearing>
-            <Form onSubmit={handleSubmit} autocomplete='off'>
-                <Form.Input placeholder='Image' value={book.image} name='image' onChange={handleInputChange} />
-                <Form.Input placeholder='Title' value={book.title} name='title' onChange={handleInputChange} />
-                <Form.Input placeholder='Author' value={book.author} name='author' onChange={handleInputChange} />
-                <Form.TextArea placeholder='Synopsys' value={book.synopsys} name='synopsys' onChange={handleInputChange} />
-                <Form.Input placeholder='Pages' value={book.pages} name='pages' onChange={handleInputChange} />
-                <Form.Input placeholder='Binding' value={book.binding} name='binding' onChange={handleInputChange} />
-                <Form.Input placeholder='isbn13' value={book.isbn13} name='isbn13' onChange={handleInputChange} />
-                <Button loading={loading} floated='right' positive type='submit' content='submit' />
-                <Button as={Link} to='/books' floated='right' type='button' content='cancel' />
-            </Form>
+            <Header content='Book Details' sub color="teal"/>
+            <Formik
+                enableReinitialize
+                initialValues={book}
+                onSubmit={values => handleFormSubmit(values)}
+                validationSchema={validationSchema}>
+                {({ handleSubmit, isValid, isSubmitting, dirty }) => (
+                    <Form className="ui form" onSubmit={handleSubmit} autoComplete='off'>
+
+                        <CustomTextInput placeholder='Image' name='image' />
+                        <CustomTextInput name='title' placeholder="Title" />
+                        <CustomTextInput placeholder='Author' name='author' />
+                        <CustomTextArea rows={3} placeholder='Synopsys' name='synopsys' />
+                        <CustomTextInput placeholder='Pages' name='pages' />
+                        <CustomTextInput placeholder='Binding' name='binding' />
+                        <CustomTextInput placeholder='isbn13' name='isbn13' />
+                        <Button
+                            disabled={isSubmitting || !isValid || !dirty}
+                            loading={loading}
+                            floated='right'
+                            positive
+                            type='submit'
+                            content='submit' />
+                        <Button as={Link} to='/books' floated='right' type='button' content='cancel' />
+                    </Form>
+                )}
+            </Formik>
+
         </Segment>
     )
 })

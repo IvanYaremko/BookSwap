@@ -7,7 +7,7 @@ export default class BookStore {
     selectedBook: Book | undefined = undefined
     editMode = false
     loading = false
-    loadingInitial = true
+    loadingInitial = false
 
     constructor() {
         makeAutoObservable(this)
