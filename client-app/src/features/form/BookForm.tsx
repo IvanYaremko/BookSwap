@@ -16,7 +16,7 @@ import CustomTextArea from "../../app/common/form/CustomTextArea";
 export default observer(function BookForm() {
     const history = useHistory()
     const { bookStore } = useStore()
-    const { createBook, updateBook, loading, loadBook, loadingInitial } = bookStore
+    const { createBook, updateBook, loading, loadBook, loadingInitial, submittingBook } = bookStore
     const { id } = useParams<{ id: string }>()
     const [book, setBook] = useState<Book>({
         id: "",
@@ -33,18 +33,22 @@ export default observer(function BookForm() {
     const validationSchema = Yup.object({
         title: Yup.string().required(),
         author: Yup.string().required(),
-        synopsys: Yup.string().required(),
         pages: Yup.number().required(),
         binding: Yup.string().required(),
         isbn13: Yup.string().required(),
     })
 
     useEffect(() => {
-        if (id) loadBook(id).then(book => setBook(book!))
-    }, [id, loadBook])
+        console.log(id)
+        if (id) {
+            loadBook(id).then(book => setBook(book!))
+        } else {
+            setBook(submittingBook)
+        }
+    }, [id, loadBook, submittingBook])
 
     function handleFormSubmit(book: Book) {
-        if (book.id.length === 0) {
+        if (book.id!.length === 0) {
             let newBook = {
                 ...book,
                 id: uuid()
@@ -60,6 +64,7 @@ export default observer(function BookForm() {
 
     return (
         <Segment clearing>
+            {console.log(submittingBook)}
             <Header content='Book Details' sub color="teal"/>
             <Formik
                 enableReinitialize

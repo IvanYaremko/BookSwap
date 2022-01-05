@@ -40,7 +40,6 @@ axios.interceptors.response.use(async response => {
             break   
         case 404:
             history.push('/not-found')
-
             break
         case 500:
             store.commonStore.setServerError(data)
