@@ -86,7 +86,7 @@ export default observer(function BookForm() {
                         <CustomTextInput placeholder='Binding' name='binding' />
                         <CustomTextInput placeholder='isbn13' name='isbn13' />
                         <Button
-                            disabled={isSubmitting || !isValid || !dirty }
+                            disabled={isSubmitting || !isValid}
                             loading={loading}
                             floated='right'
                             positive
