@@ -1,11 +1,15 @@
+import axios, { AxiosError } from "axios"
 import { makeAutoObservable, runInAction } from "mobx"
+import { toast } from "react-toastify"
 import agent from "../api/agent"
+import isbnAgent from "../api/isbnAgent"
 import { Book } from "../models/Book"
+import { IsbnBook } from "../models/IsbnBook"
 
 export default class BookStore {
     bookMap = new Map<string, Book>()
     selectedBook: Book | undefined = undefined
-    submittingBook!: Book 
+    submittingBook!: Book
     editMode = false
     loading = false
     loadingInitial = false
@@ -120,9 +124,32 @@ export default class BookStore {
         }
     }
 
-    setSubmittingBook = (book: Book) => {
-        this.submittingBook = book
-        console.log(this.submittingBook)
+    setSubmittingBook = async (isbn: string) => {
+        this.loading = true
+        try {
+            await isbnAgent.requests.get<IsbnBook>(isbn).then(response => {
+                const {book} = response
+                let newBook: Book = {
+                    id: "",
+                    title: book.title,
+                    author: book.authors[0],
+                    synopsys: book.synopsys,
+                    pages: book.pages,
+                    binding: book.binding,
+                    isbn13: book.isbn13,
+                    image: book.image,
+                    county: "carlow"
+                }
+                runInAction(() => {
+                    this.submittingBook = newBook
+                    this.loading = false
+                })
+            })
+        } catch (error) {
+            runInAction(() => {
+                this.loading = false
+            })
+        }
     }
 
 }

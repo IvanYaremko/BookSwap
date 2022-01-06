@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { Button, Header, Segment } from "semantic-ui-react";
+import { Button, Header, Image, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useStore } from "../../app/stores/Store";
 import { v4 as uuid } from 'uuid'
@@ -22,9 +22,9 @@ export default observer(function BookForm() {
         id: "",
         title: "",
         author: "",
-        synopsys: "",
+        synopsys: "n/a",
         pages: 0,
-        binding: "",
+        binding: "n/a",
         isbn13: "",
         image: "",
         county: "carlow"
@@ -33,17 +33,17 @@ export default observer(function BookForm() {
     const validationSchema = Yup.object({
         title: Yup.string().required(),
         author: Yup.string().required(),
+        synopsys: Yup.string().required(),
         pages: Yup.number().required(),
         binding: Yup.string().required(),
         isbn13: Yup.string().required(),
     })
 
     useEffect(() => {
-        console.log(id)
         if (id) {
             loadBook(id).then(book => setBook(book!))
         } else {
-            setBook(submittingBook)
+            setBook({...submittingBook})
         }
     }, [id, loadBook, submittingBook])
 
@@ -60,11 +60,10 @@ export default observer(function BookForm() {
     }
 
 
-    if (loadingInitial) return <LoadingComponent content="Loading book..." />
+    if (loadingInitial || loading) return <LoadingComponent content="Loading book..." />
 
     return (
         <Segment clearing>
-            {console.log(submittingBook)}
             <Header content='Book Details' sub color="teal"/>
             <Formik
                 enableReinitialize
@@ -73,8 +72,13 @@ export default observer(function BookForm() {
                 validationSchema={validationSchema}>
                 {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                     <Form className="ui form" onSubmit={handleSubmit} autoComplete='off'>
-
-                        <CustomTextInput placeholder='Image' name='image' />
+                        <Image
+                            centered
+                            src={book.image}
+                            size="small"
+                            rounded
+                            placeholder='Image'
+                            name='image' />
                         <CustomTextInput name='title' placeholder="Title" />
                         <CustomTextInput placeholder='Author' name='author' />
                         <CustomTextArea rows={3} placeholder='Synopsys' name='synopsys' />
@@ -82,7 +86,7 @@ export default observer(function BookForm() {
                         <CustomTextInput placeholder='Binding' name='binding' />
                         <CustomTextInput placeholder='isbn13' name='isbn13' />
                         <Button
-                            disabled={isSubmitting || !isValid || !dirty}
+                            disabled={isSubmitting || !isValid || !dirty }
                             loading={loading}
                             floated='right'
                             positive
