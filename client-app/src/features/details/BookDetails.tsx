@@ -18,7 +18,7 @@ export default observer(function BookDetails() {
     if(loadingInitial || !book) return <LoadingComponent/>
     return (
             <Card>
-                <Image src='https://react.semantic-ui.com/images/wireframe/image.png' />
+                <Image src={book.image} size="small" centered/>
                 <Card.Content>
                     <Card.Header>{book.title}</Card.Header>
                     <Card.Meta>

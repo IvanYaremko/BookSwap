@@ -10,6 +10,7 @@ import BookDetails from '../../features/details/BookDetails';
 import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/errors/NotFound';
 import ServerError from '../../features/errors/ServerError';
+import IsbnForm from '../../features/form/IsbnForm';
 
 function App() {
   const location = useLocation()
@@ -27,7 +28,8 @@ function App() {
               <Switch>
                 <Route exact path='/books' component={BookDashboard} />
                 <Route path='/books/:id' component={BookDetails} />
-                <Route key={location.key} path={['/createBook', '/edit/:id']} component={BookForm} />
+                <Route key={location.key} path={['/edit/:id','/edit',]} component={BookForm} />
+                <Route path={'/createBook'} component={IsbnForm} />
                 <Route path='/server-error' component={ServerError} />
                 <Route component={NotFound} />
               </Switch>

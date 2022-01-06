@@ -24,7 +24,8 @@ export default observer(function BookList() {
                         <Item key={book.id}>
                             <Item.Image
                                 size='tiny'
-                                src='https://react.semantic-ui.com/images/wireframe/image.png' />
+                                src={book.image}
+                            />
                             <Item.Content verticalAlign='middle'>
                                 <Item.Header as='a'>{book.title}</Item.Header>
                                 <Item.Content> {book.author} </Item.Content>
@@ -36,7 +37,8 @@ export default observer(function BookList() {
                                 onClick={(e) => handleBookDelete(e, book.id)}
                                 floated='right'
                                 color='red'
-                                content='delete' />
+                                content='delete'
+                                size="small"/>
                             <Item.Meta hidden>{book.isbn13}</Item.Meta>
                         </Item>
                     ))}

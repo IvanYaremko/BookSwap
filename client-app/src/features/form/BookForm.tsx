@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { Button, Header, Segment } from "semantic-ui-react";
+import { Button, Header, Image, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useStore } from "../../app/stores/Store";
 import { v4 as uuid } from 'uuid'
@@ -16,15 +16,15 @@ import CustomTextArea from "../../app/common/form/CustomTextArea";
 export default observer(function BookForm() {
     const history = useHistory()
     const { bookStore } = useStore()
-    const { createBook, updateBook, loading, loadBook, loadingInitial } = bookStore
+    const { createBook, updateBook, loading, loadBook, loadingInitial, submittingBook } = bookStore
     const { id } = useParams<{ id: string }>()
     const [book, setBook] = useState<Book>({
         id: "",
         title: "",
         author: "",
-        synopsys: "",
+        synopsys: "n/a",
         pages: 0,
-        binding: "",
+        binding: "n/a",
         isbn13: "",
         image: "",
         county: "carlow"
@@ -40,11 +40,15 @@ export default observer(function BookForm() {
     })
 
     useEffect(() => {
-        if (id) loadBook(id).then(book => setBook(book!))
-    }, [id, loadBook])
+        if (id) {
+            loadBook(id).then(book => setBook(book!))
+        } else {
+            setBook({...submittingBook})
+        }
+    }, [id, loadBook, submittingBook])
 
     function handleFormSubmit(book: Book) {
-        if (book.id.length === 0) {
+        if (book.id!.length === 0) {
             let newBook = {
                 ...book,
                 id: uuid()
@@ -56,7 +60,7 @@ export default observer(function BookForm() {
     }
 
 
-    if (loadingInitial) return <LoadingComponent content="Loading book..." />
+    if (loadingInitial || loading) return <LoadingComponent content="Loading book..." />
 
     return (
         <Segment clearing>
@@ -68,8 +72,13 @@ export default observer(function BookForm() {
                 validationSchema={validationSchema}>
                 {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                     <Form className="ui form" onSubmit={handleSubmit} autoComplete='off'>
-
-                        <CustomTextInput placeholder='Image' name='image' />
+                        <Image
+                            centered
+                            src={book.image}
+                            size="small"
+                            rounded
+                            placeholder='Image'
+                            name='image' />
                         <CustomTextInput name='title' placeholder="Title" />
                         <CustomTextInput placeholder='Author' name='author' />
                         <CustomTextArea rows={3} placeholder='Synopsys' name='synopsys' />
@@ -77,7 +86,7 @@ export default observer(function BookForm() {
                         <CustomTextInput placeholder='Binding' name='binding' />
                         <CustomTextInput placeholder='isbn13' name='isbn13' />
                         <Button
-                            disabled={isSubmitting || !isValid || !dirty}
+                            disabled={isSubmitting || !isValid || !dirty }
                             loading={loading}
                             floated='right'
                             positive

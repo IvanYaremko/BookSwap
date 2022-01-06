@@ -1,10 +1,15 @@
-import { makeAutoObservable,  runInAction } from "mobx"
+import axios, { AxiosError } from "axios"
+import { makeAutoObservable, runInAction } from "mobx"
+import { toast } from "react-toastify"
 import agent from "../api/agent"
+import isbnAgent from "../api/isbnAgent"
 import { Book } from "../models/Book"
+import { IsbnBook } from "../models/IsbnBook"
 
 export default class BookStore {
     bookMap = new Map<string, Book>()
     selectedBook: Book | undefined = undefined
+    submittingBook!: Book
     editMode = false
     loading = false
     loadingInitial = false
@@ -21,7 +26,6 @@ export default class BookStore {
         this.setLoadingInitial(true)
         try {
             const books = await agent.Books.list()
-
             books.forEach(book => {
                 this.setBook(book)
             })
@@ -57,7 +61,7 @@ export default class BookStore {
     }
 
     private setBook = (book: Book) => {
-        this.bookMap.set(book.id, book)
+        this.bookMap.set(book.id!, book)
     }
 
     private getBook = (id: string) => {
@@ -68,7 +72,7 @@ export default class BookStore {
         this.loadingInitial = state
     }
 
-    createBook = async(book: Book) => {
+    createBook = async (book: Book) => {
         this.loading = true
         try {
             await agent.Books.create(book)
@@ -116,7 +120,35 @@ export default class BookStore {
             console.log(error)
             runInAction(() => {
                 this.loading = false
-            }) 
+            })
+        }
+    }
+
+    setSubmittingBook = async (isbn: string) => {
+        this.loading = true
+        try {
+            await isbnAgent.requests.get<IsbnBook>(isbn).then(response => {
+                const {book} = response
+                let newBook: Book = {
+                    id: "",
+                    title: book.title,
+                    author: book.authors[0],
+                    synopsys: book.synopsys,
+                    pages: book.pages,
+                    binding: book.binding,
+                    isbn13: book.isbn13,
+                    image: book.image,
+                    county: "carlow"
+                }
+                runInAction(() => {
+                    this.submittingBook = newBook
+                    this.loading = false
+                })
+            })
+        } catch (error) {
+            runInAction(() => {
+                this.loading = false
+            })
         }
     }
 
