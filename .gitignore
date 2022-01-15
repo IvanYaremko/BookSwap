@@ -7,7 +7,9 @@ bookswap.db-shm
 bookswap.db-wal
 
 appsettings.json
-
+*.bookswap.db
+*bookswap.db
+bookswap.db
 # User-specific files
 *.rsuser
 *.suo
