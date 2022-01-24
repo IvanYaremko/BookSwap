@@ -4,6 +4,8 @@ using API.Extensions;
 using FluentValidation.AspNetCore;
 using Application.Books;
 using API.Middleware;
+using Microsoft.AspNetCore.Identity;
+using Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,7 @@ builder.Services.AddControllers().AddFluentValidation(config =>
     config.RegisterValidatorsFromAssemblyContaining<Create>();
 });
 builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
 var app = builder.Build();
 // Custom exception handling middleware
 app.UseMiddleware<ExceptionMiddleware>();
@@ -39,8 +42,9 @@ var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<DataContext>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
     context.Database.Migrate();
-    await Seed.SeedData(context);
+    await Seed.SeedData(context, userManager);
 
 }
 catch (Exception ex)
