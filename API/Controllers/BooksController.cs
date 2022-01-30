@@ -10,6 +10,7 @@ namespace API.Controllers
     /// This is a thin controller as it has minimum logic. MediatR library is used to handle 
     /// the flow of control for CQRS design.
     /// </summary>
+    [AllowAnonymous]
     public class BooksController : BaseApiController
     {
         /// <summary>
