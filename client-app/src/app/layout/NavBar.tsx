@@ -1,9 +1,12 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
-import { NavLink } from "react-router-dom";
-import { Button, Container, Icon, Menu } from "semantic-ui-react";
+import { Link, NavLink } from "react-router-dom";
+import { Button, Container, Dropdown, Icon, Menu } from "semantic-ui-react";
+import { useStore } from "../stores/Store";
 
 
-export default function NavBar() {
+export default observer(function NavBar() {
+    const { userStore: { user, logout } } = useStore()
 
     return (
         <Menu inverted fixed='top'>
@@ -15,9 +18,17 @@ export default function NavBar() {
 
                 </Menu.Item>
                 <Menu.Item>
-                    <Button as={NavLink} to='/createBook' positive content='Add book'/>
+                    <Button as={NavLink} to='/createBook' positive content='Add book' />
+                </Menu.Item>
+                <Menu.Item position="right">
+                    <Dropdown icon='cog'>
+                        <Dropdown.Menu>
+                            <Dropdown.Item as={Link} to={`/profile/${user?.userName}`} text='My Profile' icon='user' />
+                            <Dropdown.Item onClick={logout} text='logout' icon='power' />
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </Menu.Item>
             </Container>
         </Menu>
     )
-}
+})

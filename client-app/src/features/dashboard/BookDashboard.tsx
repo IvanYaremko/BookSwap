@@ -15,7 +15,7 @@ export default observer(function BookDashboard() {
       }, [bookMap.size, loadBooks])
     
     
-    if(bookStore.loadingInitial) return <LoadingComponent content='loading app' />
+    if(bookStore.loadingInitial) return <LoadingComponent content='Loading Books' />
     
     return (
         <>
