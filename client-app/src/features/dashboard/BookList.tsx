@@ -8,7 +8,7 @@ import { useStore } from "../../app/stores/Store";
 export default observer(function BookList() {
     const [target, setTarget] = useState('')
     const { bookStore } = useStore()
-    const {deleteBook, books, loading} = bookStore
+    const {deleteBook, marketBooks, loading} = bookStore
 
     function handleBookDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
         setTarget(e.currentTarget.name)
@@ -20,7 +20,7 @@ export default observer(function BookList() {
             <Segment>
                 <Item.Group divided>
 
-                    {books.map(book => (
+                    {marketBooks.map(book => (
                         <Item key={book.id}>
                             <Item.Image
                                 size='tiny'

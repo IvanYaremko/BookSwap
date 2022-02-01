@@ -12,5 +12,6 @@ public class Book{
     public string? Isbn13 { get; set; }
     public string? Image { get; set; }
     public string? County { get; set; }
-    // public Member? BookOwner { get; set; }
+    
+    public string AppUserId { get; set; }
 }
