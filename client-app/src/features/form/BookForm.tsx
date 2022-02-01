@@ -15,7 +15,8 @@ import CustomTextArea from "../../app/common/form/CustomTextArea";
 
 export default observer(function BookForm() {
     const history = useHistory()
-    const { bookStore } = useStore()
+    const { bookStore, userStore } = useStore()
+    const {user} = userStore
     const { createBook, updateBook, loading, loadBook, loadingInitial, submittingBook } = bookStore
     const { id } = useParams<{ id: string }>()
     const [book, setBook] = useState<Book>({
@@ -27,7 +28,8 @@ export default observer(function BookForm() {
         binding: "n/a",
         isbn13: "",
         image: "",
-        county: "carlow"
+        county: "carlow",
+        appUserId: ""
     })
 
     const validationSchema = Yup.object({
@@ -51,7 +53,8 @@ export default observer(function BookForm() {
         if (book.id!.length === 0) {
             let newBook = {
                 ...book,
-                id: uuid()
+                id: uuid(),
+                appUserId: user!.id
             }
             createBook(newBook).then(() => history.push(`/books/${newBook.id}`))
         } else {
@@ -85,6 +88,7 @@ export default observer(function BookForm() {
                         <CustomTextInput placeholder='Pages' name='pages' />
                         <CustomTextInput placeholder='Binding' name='binding' />
                         <CustomTextInput placeholder='isbn13' name='isbn13' />
+                      
                         <Button
                             disabled={isSubmitting || !isValid}
                             loading={loading}

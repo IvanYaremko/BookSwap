@@ -9,6 +9,18 @@ public class DataContext : IdentityDbContext<AppUser>
     {
     }
 
+    // protected override void OnModelCreating(ModelBuilder builder)
+    // {
+    //     base.OnModelCreating(builder);
+
+    //     builder.Entity<AppUser>()
+    //         .HasMany(b => b.Books)
+    //         .WithOne(a => a.AppUser)
+    //         .IsRequired();
+    // }
+
     public DbSet<Book> Books { get; set; }
- 
+
+    public DbSet<AppUser> AppUsers { get; set; }
+
 }

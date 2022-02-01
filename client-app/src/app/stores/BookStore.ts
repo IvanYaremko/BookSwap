@@ -3,6 +3,8 @@ import agent from "../api/agent"
 import isbnAgent from "../api/isbnAgent"
 import { Book } from "../models/Book"
 import { IsbnBook } from "../models/IsbnBook"
+import { store } from "./Store";
+
 
 export default class BookStore {
     bookMap = new Map<string, Book>()
@@ -16,8 +18,12 @@ export default class BookStore {
         makeAutoObservable(this)
     }
 
-    get books() {
-        return Array.from(this.bookMap.values())
+    get marketBooks() {
+        return Array.from(this.bookMap.values()).filter(book => book.appUserId !== store.userStore.user!.id)
+    }
+
+    get ownedBook() {
+        return Array.from(this.bookMap.values()).filter(book => book.appUserId === store.userStore.user!.id)
     }
 
     loadBooks = async () => {
@@ -136,7 +142,8 @@ export default class BookStore {
                     binding: book.binding,
                     isbn13: book.isbn13,
                     image: book.image,
-                    county: "carlow"
+                    county: "carlow",
+                    appUserId: store.userStore.user!.id
                 }
                 runInAction(() => {
                     this.submittingBook = newBook

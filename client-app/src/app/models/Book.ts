@@ -8,4 +8,5 @@ export interface Book {
   isbn13: string
   image: string
   county: string
+  appUserId: string
 }

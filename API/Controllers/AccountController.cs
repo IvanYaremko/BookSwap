@@ -39,6 +39,7 @@ namespace API.Controllers
             {
                 return new UserDto
                 {
+                    Id = user.Id,
                     DisplayName = user.DisplayName,
                     UserName = user.UserName,
                     Token = tokenService.CreateToken(user)
@@ -75,6 +76,7 @@ namespace API.Controllers
             {
                 return new UserDto
                 {
+                    Id = user.Id,
                     UserName = user.UserName,
                     DisplayName = user.DisplayName,
                     Token = tokenService.CreateToken(user),
@@ -92,6 +94,7 @@ namespace API.Controllers
 
             return new UserDto
             {
+                Id = user.Id,
                 UserName = user.UserName,
                 DisplayName = user.DisplayName,
                 Token = tokenService.CreateToken(user),
