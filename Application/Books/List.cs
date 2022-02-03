@@ -3,6 +3,7 @@ using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -16,15 +17,13 @@ namespace Application.Books
     /// </summary>
     public class List
     {
-        public class Query : IRequest<Result<List<Book>>> { }
+        public class Query : IRequest<List<Book>>{ }
 
-        public class Handler : IRequestHandler<Query, Result<List<Book>>>
+        public class Handler : IRequestHandler<Query, List<Book>>
         {
             private readonly DataContext _context;
-            private readonly IHttpContextAccessor _httpContextAccessor;
             public Handler(DataContext context, IHttpContextAccessor httpContextAccessor)
             {
-                _httpContextAccessor = httpContextAccessor;
                 _context = context;
             }
 
@@ -37,13 +36,13 @@ namespace Application.Books
             /// <param name="request">The object send by the query</param>
             /// <param name="cancellationToken">Used to cancell prolonged requests</param>
             /// <returns>A Result object containing either a book object retrieved from the database or null</returns>
-            public async Task<Result<List<Book>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<Book>> Handle(Query request, CancellationToken cancellationToken)
             {
                 // var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 // var books = await _context.Books.ToListAsync();
                 // var filteredList = books.Where(book => book.AppUserId != userId);
 
-                return Result<List<Book>>.Success(await _context.Books.ToListAsync());
+                return await _context.Books.ToListAsync();
             }
         }
     }

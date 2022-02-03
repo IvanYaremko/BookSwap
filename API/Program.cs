@@ -3,7 +3,6 @@ using Persistence;
 using API.Extensions;
 using FluentValidation.AspNetCore;
 using Application.Books;
-using API.Middleware;
 using Microsoft.AspNetCore.Identity;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -27,8 +26,6 @@ builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 
 var app = builder.Build();
-// Custom exception handling middleware
-app.UseMiddleware<ExceptionMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

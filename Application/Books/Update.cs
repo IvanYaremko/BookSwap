@@ -15,25 +15,12 @@ namespace Application.Books
     /// </summary>
     public class Update
     {
-        public class Command : IRequest<Result<Unit>>
+        public class Command : IRequest
         {
             public Book Book { get; set; }
         }
 
-        /// <summary>
-        /// This is a middleware class used to handle validation
-        /// The book object is retrieved from the Command class (which was invoked by a client app hitting the API endpoint in the Book Controller)
-        /// The constructor initiales the BookValidator which contains the validation rules for the book object passed.
-        /// </summary>
-        public class CommandValidator : AbstractValidator<Command>
-        {
-            public CommandValidator()
-            {
-                RuleFor(book => book.Book).SetValidator(new BookValidator());
-            }
-        }
-
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -43,15 +30,18 @@ namespace Application.Books
                 _context = context;
             }
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 var book = await _context.Books.FindAsync(request.Book.Id);
-                if(book == null) return null;
-                // Map values from the book object send to the api to the book object existing in the db
-                _mapper.Map(request.Book, book);
-                var result = await _context.SaveChangesAsync() > 0;
-                if(!result) return Result<Unit>.Failure("Failed to update the activity");
-                return Result<Unit>.Success(Unit.Value);
+                book.Author = request.Book.Author ?? book.Author;
+                book.Title = request.Book.Title ?? book.Title;
+                book.Synopsys = request.Book.Synopsys ?? book.Synopsys;
+                book.Pages = request.Book.Pages;
+                book.Binding = request.Book.Binding ?? book.Binding;
+                book.County = request.Book.County ?? book.County;
+
+                await _context.SaveChangesAsync();
+                return Unit.Value;
             }
         }
     }

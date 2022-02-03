@@ -8,6 +8,7 @@ namespace API.Services;
 
 /// <summary>
 /// This class is responsible in creating JWT Tokens.
+/// docs https://jasonwatmore.com/post/2021/06/02/net-5-create-and-validate-jwt-tokens-use-custom-jwt-middleware
 /// </summary>
 public class TokenService
 {
