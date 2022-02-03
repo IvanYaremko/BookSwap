@@ -17,29 +17,26 @@ public class TokenService
             Config = config;
     }
 
-    public string CreateToken(AppUser user)
-    {
-        var claims = new List<Claim>()
+   public string CreateToken(AppUser appUser)
         {
-            new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Email, user.Email)
-        };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(Config["TokenKey"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                    {
+                        new Claim(ClaimTypes.Name, appUser.UserName),
+                        new Claim(ClaimTypes.NameIdentifier, appUser.Id),
+                        new Claim(ClaimTypes.Email, appUser.Email)
+                    }),
+                Expires = DateTime.Now.AddDays(5),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature
+                )
+            };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Config["TokenKey"]));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.Now.AddDays(7),
-            SigningCredentials = creds
-        };
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-
-        return tokenHandler.WriteToken(token);
-    }
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
 }
