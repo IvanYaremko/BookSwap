@@ -31,10 +31,9 @@ namespace API.Controllers
         {
             var user = await userManager.FindByEmailAsync(loginDto.Email);
 
-            if (user == null) return Unauthorized();
+            if (user == null) return ValidationProblem("Invalid email");
 
             var result = await signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-
             if (result.Succeeded)
             {
                 return new UserDto
@@ -46,7 +45,7 @@ namespace API.Controllers
                 };
             }
 
-            return Unauthorized();
+            return ValidationProblem("Invalid password");
         }
 
         [HttpPost("register")]
@@ -54,13 +53,11 @@ namespace API.Controllers
         {
             if (await userManager.Users.AnyAsync(user => user.Email == registerDto.Email))
             {
-                ModelState.AddModelError("email", "Email taken");
-                return ValidationProblem();
+                return ValidationProblem("Email taken");
             }
             if (await userManager.Users.AnyAsync(user => user.UserName == registerDto.UserName))
             {
-                ModelState.AddModelError("username", "Username taken");
-                return ValidationProblem();
+                return ValidationProblem("Username taken");
             }
 
             var user = new AppUser
