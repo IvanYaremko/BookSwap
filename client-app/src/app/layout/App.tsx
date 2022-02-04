@@ -11,10 +11,10 @@ import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/errors/NotFound';
 import ServerError from '../../features/errors/ServerError';
 import IsbnForm from '../../features/form/IsbnForm';
-import LoginForm from '../../features/auth/LoginForm';
 import { useStore } from '../stores/Store';
 import LoadingComponent from './LoadingComponent';
-import ModalContainer from '../common/modals/ModalContainer';
+import LoginForm from '../../features/auth/LoginForm';
+import RegisterForm from '../../features/auth/RegisterForm';
 
 function App() {
   const location = useLocation()
@@ -22,9 +22,9 @@ function App() {
   
   useEffect(() => {
     if (commonStore.token) {
-      userStore.getUser().finally(() => commonStore.setApplicationLoaded())
+      userStore.getUser().finally(() => commonStore.setApplicationLoaded(true))
     } else {
-      commonStore.setApplicationLoaded()
+      commonStore.setApplicationLoaded(true)
     }
   }, [commonStore, userStore])
 
@@ -33,10 +33,11 @@ function App() {
   return (
     <>
       <ToastContainer position='bottom-right' hideProgressBar />
-      <ModalContainer/>
       <Route exact path='/' component={HomePage} />
+      <Route exact path='/login' component={LoginForm} />
+      <Route exact path='/register' component={RegisterForm} />
       <Route
-        path={'/(.+)'}
+        path={['/books', '/books/:id', '/edit/:id', '/edit', '/createBook', '/server-error']}
         render={() => (
           <>
             <NavBar />
@@ -47,7 +48,6 @@ function App() {
                 <Route key={location.key} path={['/edit/:id','/edit',]} component={BookForm} />
                 <Route path={'/createBook'} component={IsbnForm} />
                 <Route path='/server-error' component={ServerError} />
-                <Route path='/login' component={LoginForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>

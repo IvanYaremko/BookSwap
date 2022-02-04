@@ -20,12 +20,10 @@ export default observer(function BookDashboard() {
     return (
         <>
             <Grid>
-                <Grid.Column width='8'>
+                <Grid.Column width='10'>
                     <BookList/>
                 </Grid.Column>
-                <Grid.Column width='6'>
-                    <h2>Book Filters</h2>
-                </Grid.Column>
+               
             </Grid>
         </>
     )

@@ -30,8 +30,8 @@ export default class UserStore {
             store.commonStore.setToken(user.token)
             runInAction(() => this.user = user)
             history.push('/books')
-            store.modalStore.closeModal()
         } catch (error) {
+            console.log(error)
             throw error
         }
     }
@@ -49,7 +49,6 @@ export default class UserStore {
             store.commonStore.setToken(user.token)
             runInAction(() => this.user = user)
             history.push('/books')
-            store.modalStore.closeModal()
         } catch (error) {
             throw error
         }
