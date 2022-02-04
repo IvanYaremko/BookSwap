@@ -3,11 +3,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Container, Header } from "semantic-ui-react";
 import { useStore } from "../../app/stores/Store";
-import LoginForm from "../auth/LoginForm";
-import RegisterForm from "../auth/RegisterForm";
 
 export default observer(function HomePage() {
-    const { userStore, modalStore } = useStore()
+    const { userStore } = useStore()
     return (
         <Container style={{ marginTop: '7em' }}>
             <h1>Home page</h1>
@@ -21,13 +19,13 @@ export default observer(function HomePage() {
                 <>
                     <Button
                         size='medium'
-                        onClick={() => modalStore.openModal(<LoginForm />)}>
+                        as={Link} to='/login'>
                         Login
                     </Button>
 
                     <Button
                         size='medium'
-                        onClick={() => modalStore.openModal(<RegisterForm/>)}>
+                        as={Link} to='/register'>
                         Register
                     </Button>
 
