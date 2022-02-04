@@ -29,8 +29,6 @@ namespace Application.Books
             /// <summary>
             /// This method contains the logic which "handles" the request.
             /// The method queries the database for a book object specified by the requested ID
-            /// The method uses the Result class to handle errors. This approach is used instead of throwing an Exception back to the API controller.
-            /// The API controller uses its own logic in checking the Result object to send back to the client.
             /// </summary>
             /// <param name="request">The object send by the query</param>
             /// <param name="cancellationToken">Used to cancell prolonged requests</param>
