@@ -96,7 +96,7 @@ export default observer(function BookForm() {
                             positive
                             type='submit'
                             content='submit' />
-                        <Button as={Link} to='/books' floated='right' type='button' content='cancel' />
+                        <Button as={Link} to={`/profile/${user?.id}`} floated='right' type='button' content='cancel' />
                     </Form>
                 )}
             </Formik>

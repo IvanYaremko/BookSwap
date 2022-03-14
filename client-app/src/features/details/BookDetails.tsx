@@ -17,7 +17,7 @@ export default observer(function BookDetails() {
 
     if(loadingInitial || !book) return <LoadingComponent/>
     return (
-            <Card>
+            <Card fluid>
                 <Image src={book.image} size="small" centered/>
                 <Card.Content>
                     <Card.Header>{book.title}</Card.Header>
@@ -25,7 +25,7 @@ export default observer(function BookDetails() {
                         <span className='date'>{ book.binding }</span>
                     </Card.Meta>
                     <Card.Description>
-                        {book.author}
+                        <h4>{book.author}</h4>
                     </Card.Description>
                     <Card.Description>
                         {book.synopsys}
@@ -33,8 +33,8 @@ export default observer(function BookDetails() {
                 </Card.Content>
                 <Card.Content extra>
                     <Button.Group widths='2'>
-                        <Button as={Link} to={`/edit/${book.id}`}  basic color='blue' content='Edit' />
-                        <Button as={Link} to={`/books`} color='grey' content='Cancel' />
+                        {/* <Button as={Link} to={`/edit/${book.id}`}  basic color='blue' content='Edit' /> */}
+                        <Button size="tiny" as={Link} to={`/books`} color='green' content='Request swap' />
                    </Button.Group>
                 </Card.Content>
             </Card>

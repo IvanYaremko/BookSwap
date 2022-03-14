@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { Book } from "../models/Book";
+import { BookSwap } from "../models/BookSwap";
 import { User, UserForm } from "../models/User";
 import { store } from "../stores/Store";
 
@@ -65,9 +66,18 @@ const Account = {
     register: (user: UserForm) => requests.post<User>('/account/register', user)
 }
 
+const Swaps = {
+    list: () => requests.get<BookSwap[]>('/swap'),
+    details: (id: string) => requests.get<BookSwap>(`/swap/${id}`),
+    create: (swap: BookSwap) => requests.post<void>('/swap', swap),
+    update: (id: string, status: string) => requests.put<void>(`/swap/${id}`, status),
+    delete: (id: string) => requests.del<void>(`/swap/${id}`)
+}
+
 const agent = {
     Books,
-    Account
+    Account,
+    Swaps
 }
 
 export default agent

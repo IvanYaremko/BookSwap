@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx"
 import agent from "../api/agent"
 import isbnAgent from "../api/isbnAgent"
 import { Book } from "../models/Book"
+import { County } from "../models/County"
 import { IsbnBook } from "../models/IsbnBook"
 import { store } from "./Store";
 
@@ -13,6 +14,7 @@ export default class BookStore {
     editMode = false
     loading = false
     loadingInitial = false
+    county: County | undefined = undefined
 
     constructor() {
         makeAutoObservable(this)
@@ -22,8 +24,15 @@ export default class BookStore {
         return Array.from(this.bookMap.values()).filter(book => book.appUserId !== store.userStore.user!.id)
     }
 
-    get ownedBook() {
-        return Array.from(this.bookMap.values()).filter(book => book.appUserId === store.userStore.user!.id)
+    get ownedBooks() {
+        this.setLoadingInitial(true)
+
+        var books = Array.from(this.bookMap.values()).filter(book => book.appUserId === store.userStore.user!.id)
+        console.log(books)
+        console.log(this.bookMap)
+        this.setLoadingInitial(false)
+
+        return books
     }
 
     loadBooks = async () => {

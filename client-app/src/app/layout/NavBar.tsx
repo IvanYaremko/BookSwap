@@ -14,12 +14,9 @@ export default observer(function NavBar() {
                 <Menu.Item as={NavLink} to='/' exact header>
                     <Icon name='book' size="large" />
                 </Menu.Item>
-                <Menu.Item as={NavLink} to='/books' name="BookSwap" >
-
-                </Menu.Item>
-                <Menu.Item>
-                    <Button as={NavLink} to='/createBook' positive content='Add book' />
-                </Menu.Item>
+                <Menu.Item as={NavLink} to='/books' name="Market" />
+                <Menu.Item name="My Swaps" />
+                <Menu.Item as={NavLink} to='/createBook' positive content='Add book' /> 
                 <Menu.Item position="right">
                     <Dropdown icon='cog'>
                         <Dropdown.Menu>
