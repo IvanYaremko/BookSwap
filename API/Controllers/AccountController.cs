@@ -41,7 +41,8 @@ namespace API.Controllers
                     Id = user.Id,
                     DisplayName = user.DisplayName,
                     UserName = user.UserName,
-                    Token = tokenService.CreateToken(user)
+                    Token = tokenService.CreateToken(user),
+                    County = user.County
                 };
             }
 
@@ -64,7 +65,9 @@ namespace API.Controllers
             {
                 DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
-                UserName = registerDto.UserName
+                UserName = registerDto.UserName,
+                County = registerDto.County
+
             };
 
             var result = await userManager.CreateAsync(user, registerDto.Password);
@@ -77,6 +80,7 @@ namespace API.Controllers
                     UserName = user.UserName,
                     DisplayName = user.DisplayName,
                     Token = tokenService.CreateToken(user),
+                    County = user.County
                 };
             }
 
@@ -95,6 +99,8 @@ namespace API.Controllers
                 UserName = user.UserName,
                 DisplayName = user.DisplayName,
                 Token = tokenService.CreateToken(user),
+                County = user.County
+
             }; 
         }
 

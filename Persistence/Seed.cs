@@ -12,12 +12,12 @@ namespace Persistence
             {
                 var userList = new List<AppUser>
                 {
-                    new AppUser{DisplayName="Jane Doe", UserName="jane", Email="jane@email.com"},
-                    new AppUser{DisplayName="John Doe", UserName="john", Email="john@email.com",},
-                    new AppUser{DisplayName="Fedor Illych", UserName="fedor", Email="fedor@email.com"},
-                    new AppUser{DisplayName="Tom Lynch", UserName="tom", Email="tom@email.com"},
-                    new AppUser{DisplayName="Bob Reilly", UserName="fedor", Email="bob@email.com"},
-                    new AppUser{DisplayName="Phil O'Rourke", UserName="phil", Email="phil@email.com"},
+                    new AppUser{DisplayName="Jane Doe", UserName="jane", Email="jane@email.com", County="Carlow"},
+                    new AppUser{DisplayName="John Doe", UserName="john", Email="john@email.com", County="Carlow"},
+                    new AppUser{DisplayName="Fedor Illych", UserName="fedor", Email="fedor@email.com", County="Carlow"},
+                    new AppUser{DisplayName="Tom Lynch", UserName="tom", Email="tom@email.com", County="Carlow"},
+                    new AppUser{DisplayName="Bob Reilly", UserName="fedor", Email="bob@email.com", County="Carlow"},
+                    new AppUser{DisplayName="Phil O'Rourke", UserName="phil", Email="phil@email.com", County="Carlow"},
                 };
 
                 // This loop will do the work required dto create the user, set a password, and 

@@ -7,7 +7,7 @@ import { useStore } from "../../app/stores/Store";
 
 export default observer(function BookList() {
     const { bookStore } = useStore()
-    const { marketBooks } = bookStore
+    const { marketBooks, county } = bookStore
 
 
 
@@ -15,7 +15,7 @@ export default observer(function BookList() {
         <>
             <Segment>
                 <Item.Group divided>
-                    {marketBooks.map(book => (
+                    {marketBooks.filter(book => book.county.toLowerCase() === county?.toLowerCase()).map( book => (
                         <Item key={book.id}>
                             <Item.Image
                                 size='tiny'

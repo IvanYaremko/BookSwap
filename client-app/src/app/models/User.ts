@@ -3,6 +3,7 @@ export interface User {
     userName: string
     displayName: string
     token: string
+    county: string
 }
 
 export interface UserForm {
@@ -10,4 +11,5 @@ export interface UserForm {
     password: string
     displayName?: string
     userName?: string
+    county?: string
 }

@@ -28,7 +28,7 @@ export default observer(function BookForm() {
         binding: "n/a",
         isbn13: "",
         image: "",
-        county: "carlow",
+        county: user!.county,
         appUserId: ""
     })
 

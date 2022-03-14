@@ -39,7 +39,7 @@ function App() {
       <Route exact path='/login' component={LoginForm} />
       <Route exact path='/register' component={RegisterForm} />
       <Route
-        path={['/books', '/books/:id', '/edit/:id', '/edit', '/createBook', '/server-error', '/profile/:id']}
+        path={['/books', '/books/:id', '/edit/:id', '/edit', '/createBook', '/server-error', '/profile/:id', '/not-found']}
         render={() => (
           <>
             <NavBar />

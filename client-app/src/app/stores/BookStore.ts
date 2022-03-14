@@ -1,3 +1,4 @@
+import { count } from "console"
 import { makeAutoObservable, runInAction } from "mobx"
 import agent from "../api/agent"
 import isbnAgent from "../api/isbnAgent"
@@ -14,7 +15,7 @@ export default class BookStore {
     editMode = false
     loading = false
     loadingInitial = false
-    county: County | undefined = undefined
+    county: string | undefined = undefined
 
     constructor() {
         makeAutoObservable(this)
@@ -164,6 +165,10 @@ export default class BookStore {
                 this.loading = false
             })
         }
+    }
+
+    setCounty = (county: string) => {
+        this.county = county
     }
 
 }

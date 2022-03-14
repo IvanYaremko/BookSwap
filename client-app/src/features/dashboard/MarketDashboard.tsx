@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
-import {  Grid } from "semantic-ui-react";
+import {  Dropdown, Grid, Search } from "semantic-ui-react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useStore } from "../../app/stores/Store";
 import CustomSearch from "../Search/CustomSearch";
@@ -8,13 +8,13 @@ import BookList from "./BookList";
 
 export default observer(function MarketDashboard() {
     const { bookStore, userStore } = useStore()
-    const { loadBooks, bookMap, county } = bookStore
+    const { loadBooks, bookMap, county, setCounty } = bookStore
     const {user} = userStore
 
     
     useEffect(() => {
         if (bookMap.size <= 1) loadBooks()
-        // if(county == undefined) setCounty(user.)
+        if(county == undefined) setCounty(user?.county!)
     }, [bookMap.size, loadBooks])
 
 
@@ -24,15 +24,15 @@ export default observer(function MarketDashboard() {
 
     return (
         <>
-            <Grid>
+            <Grid centered>
                 <Grid.Column width='10' >
                     <Grid.Row>
                         <CustomSearch/>
-
+                       
                     </Grid.Row>
+                    <Search/>
                     <BookList />
                 </Grid.Column>
-
             </Grid>
         </>
     )

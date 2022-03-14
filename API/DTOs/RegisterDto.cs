@@ -20,5 +20,7 @@ namespace API.DTOs
         [Required]
         [RegularExpression("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,12}$", ErrorMessage = "Password must be complex - between 4 to 12 characters in length")]
         public string Password { get; set; }
+
+        public string County { get; set; }
     }
 }
