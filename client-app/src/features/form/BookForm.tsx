@@ -56,9 +56,9 @@ export default observer(function BookForm() {
                 id: uuid(),
                 appUserId: user!.id
             }
-            createBook(newBook).then(() => history.push(`/books/${newBook.id}`))
+            createBook(newBook).then(() => history.push("/books"))
         } else {
-            updateBook(book).then(() => history.push(`/books/${book.id}`))
+            updateBook(book).then(() => history.push("/books"))
         }
     }
 

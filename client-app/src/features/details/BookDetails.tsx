@@ -33,7 +33,6 @@ export default observer(function BookDetails() {
                 </Card.Content>
                 <Card.Content extra>
                     <Button.Group widths='2'>
-                        {/* <Button as={Link} to={`/edit/${book.id}`}  basic color='blue' content='Edit' /> */}
                         <Button size="tiny" as={Link} to={`/books`} color='green' content='Request swap' />
                    </Button.Group>
                 </Card.Content>
