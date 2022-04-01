@@ -20,7 +20,7 @@ namespace Persistence
                     new AppUser{DisplayName="Phil O'Rourke", UserName="phil", Email="phil@email.com", County="Carlow"},
                 };
 
-                // This loop will do the work required dto create the user, set a password, and 
+                // This loop will do the work required to create the user, set a password, and 
                 // store the user into the database. The DataContext was provided in the IdentityServicesExtensions
                 foreach (var user in userList)
                 {

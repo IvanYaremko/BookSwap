@@ -13,6 +13,7 @@ namespace Application.Swaps
         {
             public Guid id { get; set; }
             public string status { get; set; }
+            public string requesterBookId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -27,6 +28,7 @@ namespace Application.Swaps
             {
                 var swap = await _context.Swaps.FindAsync(request.id);
                 swap.status = request.status;
+                swap.requesterBookID = request.requesterBookId;
                 await _context.SaveChangesAsync();
                 return Unit.Value;
             }

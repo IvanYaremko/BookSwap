@@ -1,6 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
-import { history } from "../..";
 import { Book } from "../models/Book";
 import { BookSwap } from "../models/BookSwap";
 import { User, UserForm } from "../models/User";
@@ -48,7 +47,7 @@ const responseBody = <T>(response: AxiosResponse<T>) => response.data
 const requests = {
     get: <T>(url: string) => axios.get<T>(url).then(responseBody),
     post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
-    put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
+    put: <T>(url: string, body: {}, text?: string) => axios.put<T>(url, body).then(responseBody),
     del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 }
 
@@ -70,7 +69,7 @@ const Swaps = {
     list: () => requests.get<BookSwap[]>('/swap'),
     details: (id: string) => requests.get<BookSwap>(`/swap/${id}`),
     create: (swap: BookSwap) => requests.post<void>('/swap', swap),
-    update: (id: string, status: string) => requests.put<void>(`/swap/${id}`, status),
+    update: (id: string, status: string, requesterBookID: string) => requests.put<void>(`/swap/${id}`, status, requesterBookID),
     delete: (id: string) => requests.del<void>(`/swap/${id}`)
 }
 

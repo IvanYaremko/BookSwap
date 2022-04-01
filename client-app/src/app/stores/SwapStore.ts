@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { BookSwap } from "../models/BookSwap";
+import { User } from "../models/User";
 
 
 export default class SwapStore {
@@ -70,11 +71,11 @@ export default class SwapStore {
             })
         }
     }
-
-    updateSwap = async (swap: BookSwap) => {
+// need to refeactor from requesuterUser to the book the requestee has selected from the requester
+    updateSwap = async (swap: BookSwap, requesterUser: User) => {
         this.loading = true
         try {
-            await agent.Swaps.update(swap.id, swap.status)
+            await agent.Swaps.update(swap.id, swap.status, requesterUser.id)
             runInAction(() => {
                 this.swapMap.set(swap.id, swap)
                 this.selectedSwap = swap

@@ -5,7 +5,6 @@ import _ from 'lodash'
 import { Button, Dropdown, Header } from "semantic-ui-react";
 import CustomTextInput from "../../app/common/form/CustomTextInput";
 import { useStore } from "../../app/stores/Store";
-import { County } from "../../app/models/County";
 import { UserForm } from "../../app/models/User";
 
 export default observer(function RegisterForm() {

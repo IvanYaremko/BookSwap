@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Container } from 'semantic-ui-react';
 import NavBar from './NavBar';
-import BookDashboard from '../../features/dashboard/MarketDashboard';
 import { observer } from 'mobx-react-lite';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
@@ -17,6 +16,7 @@ import LoginForm from '../../features/auth/LoginForm';
 import RegisterForm from '../../features/auth/RegisterForm';
 import Profile from '../../features/profile/Profile';
 import MarketDashboard from '../../features/dashboard/MarketDashboard';
+import SwapDashboard from '../../features/dashboard/SwapDashboard';
 
 function App() {
   const location = useLocation()
@@ -39,7 +39,7 @@ function App() {
       <Route exact path='/login' component={LoginForm} />
       <Route exact path='/register' component={RegisterForm} />
       <Route
-        path={['/books', '/books/:id', '/edit/:id', '/edit', '/createBook', '/server-error', '/profile/:id', '/not-found']}
+        path={['/books', '/books/:id', '/edit/:id', '/edit', '/createBook', '/server-error', '/profile/:id', '/not-found', '/swaps']}
         render={() => (
           <>
             <NavBar />
@@ -50,7 +50,8 @@ function App() {
                 <Route key={location.key} path={['/edit/:id','/edit',]} component={BookForm} />
                 <Route path={'/createBook'} component={IsbnForm} />
                 <Route path='/server-error' component={ServerError} />
-                <Route path={'/profile/:id'} component={ Profile }/>
+                <Route path={'/profile/:id'} component={Profile} />
+                <Route path={'/swaps'} component={SwapDashboard}/>
                 <Route component={NotFound} />
               </Switch>
             </Container>

@@ -1,7 +1,8 @@
 export interface BookSwap {
     id: string,
-    bookID: string,
     ownerID: string,
+    ownerBookID: string,  
     requesterID: string,
+    requesterBookID: string,
     status: string
 }

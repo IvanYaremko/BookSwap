@@ -41,9 +41,9 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSwap(Guid id, string status)
+        public async Task<IActionResult> UpdateSwap(Guid id, string status, string requesterBookId)
         {
-            return Ok(await mediator.Send(new UpdateSwap.Command{id = id, status = status}));
+            return Ok(await mediator.Send(new UpdateSwap.Command{id = id, status = status, requesterBookId = requesterBookId}));
         }
 
         [HttpDelete("{id}")]

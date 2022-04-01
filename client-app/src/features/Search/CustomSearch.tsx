@@ -1,8 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { useEffect, useState } from 'react';
-import _ from 'lodash';
-import { Item, Label, Search } from 'semantic-ui-react';
+import { useState } from 'react';
+import { Item, Search } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { useStore } from "../../app/stores/Store";
 import { Book } from "../../app/models/Book";

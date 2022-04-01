@@ -8,9 +8,10 @@ namespace Domain
     public class BookSwap
     {
         public Guid Id { get; set; }
-        public string BookID { get; set; }
         public string ownerID { get; set; }
+        public string ownerBookID { get; set; }
         public string requesterID { get; set; }
+        public string requesterBookID { get; set; }
         public string status { get; set; }
     }
 }
