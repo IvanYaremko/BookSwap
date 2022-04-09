@@ -20,17 +20,14 @@ export default class BookStore {
     }
 
     get marketBooks() {
-        return Array.from(this.bookMap.values()).filter(book => book.appUserId !== store.userStore.user!.id)
+        let bookArray = Array.from(this.bookMap.values()).filter(book => book.appUserId !== store.userStore.user!.id)
+        return bookArray
     }
 
     get ownedBooks() {
         this.setLoadingInitial(true)
-
         var books = Array.from(this.bookMap.values()).filter(book => book.appUserId === store.userStore.user!.id)
-        console.log(books)
-        console.log(this.bookMap)
         this.setLoadingInitial(false)
-
         return books
     }
 
@@ -76,7 +73,7 @@ export default class BookStore {
         this.bookMap.set(book.id!, book)
     }
 
-    private getBook = (id: string) => {
+    getBook = (id: string) => {
         return this.bookMap.get(id)
     }
 

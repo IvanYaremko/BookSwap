@@ -35,7 +35,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BookSwap>> GetBook(Guid id)
+        public async Task<ActionResult<BookSwap>> GetSwap(Guid id)
         {
             return await mediator.Send(new DetailsSwap.Query{ id = id });
         }

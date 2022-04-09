@@ -1,7 +1,10 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
+import { Book } from "../models/Book";
 import { BookSwap } from "../models/BookSwap";
 import { User } from "../models/User";
+import { store } from "./Store";
+
 
 
 export default class SwapStore {
@@ -14,6 +17,20 @@ export default class SwapStore {
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    get booksRequestedFromMe() {
+        return null;
+    }
+
+    get booksIRequest() {
+        this.setLoadingInitial(true)
+        var swaps = Array.from(this.swapMap.values()).filter(swap => swap.requesterID === store.userStore.user!.id)
+        console.log(store.userStore.user!.id);
+        var books: Book[] = []
+        swaps.forEach(swap => books.push(store.bookStore.getBook(swap.ownerBookID)!))
+        this.setLoadingInitial(false)
+        return books
     }
 
     loadSwaps = async () => {
@@ -29,6 +46,7 @@ export default class SwapStore {
             console.log(error)
             this.setLoadingInitial(false)
         }
+        console.log(this.swapMap)
     }
 
     loadSwap = async (id: string) => {
@@ -114,7 +132,13 @@ export default class SwapStore {
         this.swapMap.set(swap.id!, swap)
     }
 
-    private getSwap = (id: string) => {
+    getSwap = (id: string) => {
         return this.swapMap.get(id)
+    }
+
+    getSwapFromBookId = (id: string) => {
+        let swapArray = Array.from(this.swapMap.values()).filter(swap => swap.ownerBookID === id)
+        console.log(swapArray)
+        return swapArray[0]
     }
 }

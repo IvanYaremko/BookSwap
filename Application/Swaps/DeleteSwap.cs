@@ -24,7 +24,7 @@ namespace Application.Swaps
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var swap = _context.Swaps.FindAsync(request.Id);
+                var swap = await _context.Swaps.FindAsync(request.Id);
                 _context.Remove(swap);
                 await _context.SaveChangesAsync();
                 return Unit.Value;
