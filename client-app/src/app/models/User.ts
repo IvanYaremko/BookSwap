@@ -1,3 +1,5 @@
+import { Book } from "./Book"
+
 export interface User {
     id: string
     userName: string
@@ -12,4 +14,13 @@ export interface UserForm {
     displayName?: string
     userName?: string
     county?: string
+}
+
+export interface UserBook {
+    userId?: string
+    displayname?: string
+    userName?: string
+    county?: string
+    books?: Book[]
+    swapId?: string
 }

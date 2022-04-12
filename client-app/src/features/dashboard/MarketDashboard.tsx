@@ -42,7 +42,6 @@ export default observer(function MarketDashboard() {
                 <Grid.Column width='10' >
                     <Grid.Row>
                         <CustomSearch />
-
                     </Grid.Row>
                     <Dropdown name='county' placeholder="County" search selection options={countyOptions} onChange={handleDropDown} defaultValue={county}/>
                     <BookList />

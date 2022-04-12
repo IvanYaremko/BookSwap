@@ -17,6 +17,7 @@ import RegisterForm from '../../features/auth/RegisterForm';
 import Profile from '../../features/profile/Profile';
 import MarketDashboard from '../../features/dashboard/MarketDashboard';
 import SwapDashboard from '../../features/dashboard/SwapDashboard';
+import RequestorBookList from '../../features/dashboard/RequestorBookList';
 
 function App() {
   const location = useLocation()
@@ -39,7 +40,7 @@ function App() {
       <Route exact path='/login' component={LoginForm} />
       <Route exact path='/register' component={RegisterForm} />
       <Route
-        path={['/books', '/books/:id', '/edit/:id', '/edit', '/createBook', '/server-error', '/profile/:id', '/not-found', '/swaps']}
+        path={['/books', '/books/:id', '/edit/:id', '/edit', '/createBook', '/server-error', '/profile/:id', '/not-found', '/swaps', '/requestor/:id']}
         render={() => (
           <>
             <NavBar />
@@ -51,6 +52,7 @@ function App() {
                 <Route path={'/createBook'} component={IsbnForm} />
                 <Route path='/server-error' component={ServerError} />
                 <Route path={'/profile/:id'} component={Profile} />
+                <Route path={'/requestor/:id'} component={RequestorBookList} />
                 <Route path={'/swaps'} component={SwapDashboard}/>
                 <Route component={NotFound} />
               </Switch>

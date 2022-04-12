@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { Book } from "../models/Book";
 import { BookSwap } from "../models/BookSwap";
-import { User, UserForm } from "../models/User";
+import { User, UserBook, UserForm } from "../models/User";
 import { store } from "../stores/Store";
 
 const sleep = (delay: number) => {
@@ -62,14 +62,15 @@ const Books = {
 const Account = {
     current: () => requests.get<User>('/account'),
     login: (user: UserForm) => requests.post<User>('/account/login', user),
-    register: (user: UserForm) => requests.post<User>('/account/register', user)
+    register: (user: UserForm) => requests.post<User>('/account/register', user),
+    getUserById: (id: string) => requests.get<UserBook>(`/account/${id}`)
 }
 
 const Swaps = {
     list: () => requests.get<BookSwap[]>('/swap'),
     details: (id: string) => requests.get<BookSwap>(`/swap/${id}`),
     create: (swap: BookSwap) => requests.post<void>('/swap', swap),
-    update: (id: string, status: string, requesterBookID: string) => requests.put<void>(`/swap/${id}`, status, requesterBookID),
+    update: (id: string, swap: BookSwap) => requests.put<void>(`/swap/${id}`, swap),
     delete: (id: string) => requests.del<void>(`/swap/${id}`)
 }
 

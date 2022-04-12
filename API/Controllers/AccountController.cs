@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Persistence;
 
 namespace API.Controllers
 {
@@ -17,13 +18,15 @@ namespace API.Controllers
         private readonly UserManager<AppUser> userManager;
         private readonly SignInManager<AppUser> signInManager;
         private readonly TokenService tokenService;
+        private readonly DataContext context;
 
         public AccountController(UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager, TokenService tokenService)
+            SignInManager<AppUser> signInManager, TokenService tokenService, DataContext context)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.tokenService = tokenService;
+            this.context = context;
         }
 
         [HttpPost("login")]
@@ -104,6 +107,26 @@ namespace API.Controllers
             }; 
         }
 
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserBook>> GetUser(Guid id){
+            var user = await userManager.FindByIdAsync(id.ToString());
+            var books = await context.Books.ToListAsync();
+            List<Book> userBooks = new List<Book>();
+
+            foreach (Book b in books){
+                if(b.AppUserId == id.ToString()) userBooks.Add(b);
+            }
+               
+            return new UserBook
+            {
+                UserId = user.Id,
+                UserName = user.UserName,
+                DisplayName = user.DisplayName,
+                County = user.County,
+                Books = userBooks
+            };
+        }
 
     }
 }

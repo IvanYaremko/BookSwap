@@ -22,14 +22,12 @@ export default observer(function SwapList() {
         <>
             <Segment compact>
                 <Item.Group divided relaxed>
-                    {console.log("from swapDashboard" + {booksIRequest})}
                     {booksIRequest.map(book => (
                         
                         <Item key={book.id}>
                             <Item.Image
                                 size='tiny'
                                 src={book.image}
-                                as={Link} to={`/books/${book.id}`} 
                             />
                             <Item.Content verticalAlign='middle'>
                                 <Item.Header >{book.title}</Item.Header>
