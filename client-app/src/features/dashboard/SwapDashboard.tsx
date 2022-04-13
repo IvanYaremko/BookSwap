@@ -10,13 +10,13 @@ import UserRequestList from "./UserRequestList";
 export default observer(function SwapDashboard() {
     const { swapStore, bookStore } = useStore()
     const { loadSwaps, swapMap, requestorMap, loadRequestors } = swapStore
-    const { loadBooks, bookMap } = bookStore
+    const { loadBooks, bookMap, booksRequested, loadBooksRequestedFromMe } = bookStore
 
     useEffect(() => {
         if (swapMap.size <= 1) loadSwaps()
         if (requestorMap.size <= 1) loadRequestors()
-
-    }, [swapMap.size, swapMap, loadSwaps, bookMap.size, bookMap, loadBooks, requestorMap.size, requestorMap, loadRequestors])
+        if (booksRequested.size <= 1) loadBooksRequestedFromMe()
+    }, [swapMap.size, swapMap, loadSwaps, bookMap.size, bookMap, loadBooks, requestorMap.size, requestorMap, loadRequestors, booksRequested, booksRequested.size, loadBooksRequestedFromMe])
 
 
 
@@ -31,8 +31,8 @@ export default observer(function SwapDashboard() {
                 </Grid.Column>
 
                 <Grid.Column>
-                    <h1>Swap requests</h1>
-                    <UserRequestList/>
+                    <h1>Swap requests from</h1>
+                    <UserRequestList />
                 </Grid.Column>
             </Grid>
 
