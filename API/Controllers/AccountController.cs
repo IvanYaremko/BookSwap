@@ -123,6 +123,7 @@ namespace API.Controllers
                 UserId = user.Id,
                 UserName = user.UserName,
                 DisplayName = user.DisplayName,
+                Email = user.Email,
                 County = user.County,
                 Books = userBooks
             };

@@ -8,16 +8,16 @@ import BookForm from '../../features/form/BookForm';
 import BookDetails from '../../features/details/BookDetails';
 import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/errors/NotFound';
-import ServerError from '../../features/errors/ServerError';
 import IsbnForm from '../../features/form/IsbnForm';
 import { useStore } from '../stores/Store';
 import LoadingComponent from './LoadingComponent';
 import LoginForm from '../../features/auth/LoginForm';
 import RegisterForm from '../../features/auth/RegisterForm';
-import Profile from '../../features/profile/Profile';
-import MarketDashboard from '../../features/dashboard/MarketDashboard';
-import SwapDashboard from '../../features/dashboard/SwapDashboard';
-import RequestorBookList from '../../features/dashboard/RequestorBookList';
+import MarketDashboard from '../../features/dashboards/market/MarketDashboard';
+import SwapDashboard from '../../features/dashboards/swap/SwapDashboard';
+import RequestorBookList from '../../features/dashboards/swap/RequestorBookList';
+import ProfileDashboard from '../../features/dashboards/profile/ProfileDashboard';
+import SwapHistoryDashboard from '../../features/dashboards/history/SwapHistoryDashboard';
 
 function App() {
   const location = useLocation()
@@ -40,7 +40,7 @@ function App() {
       <Route exact path='/login' component={LoginForm} />
       <Route exact path='/register' component={RegisterForm} />
       <Route
-        path={['/books', '/books/:id', '/edit/:id', '/edit', '/createBook', '/server-error', '/profile/:id', '/not-found', '/swaps', '/requestor/:id']}
+        path={['/books', '/books/:id', '/edit/:id', '/edit', '/createBook', '/server-error', '/profile/:id', '/not-found', '/swaps', '/requestor/:id', '/history']}
         render={() => (
           <>
             <NavBar />
@@ -50,10 +50,10 @@ function App() {
                 <Route path='/books/:id' component={BookDetails} />
                 <Route key={location.key} path={['/edit/:id','/edit',]} component={BookForm} />
                 <Route path={'/createBook'} component={IsbnForm} />
-                <Route path='/server-error' component={ServerError} />
-                <Route path={'/profile/:id'} component={Profile} />
+                <Route path={'/profile/:id'} component={ProfileDashboard} />
                 <Route path={'/requestor/:id'} component={RequestorBookList} />
-                <Route path={'/swaps'} component={SwapDashboard}/>
+                <Route path={'/swaps'} component={SwapDashboard} />
+                <Route path={'/history'} component={SwapHistoryDashboard}/>
                 <Route component={NotFound} />
               </Switch>
             </Container>

@@ -2,7 +2,8 @@ import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Book } from "../models/Book";
 import { BookSwap } from "../models/BookSwap";
-import { User, UserBook } from "../models/User";
+import { SwapHistory } from "../models/SwapHistory";
+import {  UserBook } from "../models/User";
 import { store } from "./Store";
 
 
@@ -10,13 +11,14 @@ import { store } from "./Store";
 export default class SwapStore {
     swapMap = new Map<string, BookSwap>()
     requestorMap = new Map<string, UserBook>()
+    swapHistory = new Map<string, SwapHistory>()
     selectedSwap: BookSwap | undefined = undefined
     selectedRequestor: UserBook | undefined = undefined
     sumbittedSwap!: BookSwap
     editSwap = false
     loading = false
     loadingInitial = false
-    swapDetails:Boolean = false
+    swapDetails: Boolean = false
 
     constructor() {
         makeAutoObservable(this)
@@ -35,6 +37,11 @@ export default class SwapStore {
         swaps.forEach(swap => books.push(store.bookStore.getBook(swap.ownerBookID)!))
         this.setLoadingInitial(false)
         return books
+    }
+
+    get swapHistoryArray() {
+        let swapHistory = Array.from(this.swapHistory.values())
+        return swapHistory
     }
 
     loadRequestors = async () => {
@@ -96,6 +103,40 @@ export default class SwapStore {
                 this.setLoadingInitial(false)
             }
         }
+    }
+
+    loadSwapHistory = async () => {
+        this.setLoadingInitial(true)
+        try {
+            const mySwaps = Array.from(this.swapMap.values()).filter(swap => swap.ownerID === store.userStore.user!.id && swap.status === "confirmed")
+            mySwaps.forEach(async swap => {
+                let requester = await store.userStore.getUserById(swap.requesterID)
+
+                let requestee =  await store.userStore.getUserById(swap.ownerID)
+
+                let requesterBook = await store.bookStore.loadBook(swap.requesterBookID)
+                let requesteeBook2 = await store.bookStore.loadBook(swap.ownerBookID)
+
+                let swapHistory: SwapHistory = {
+                    swapId: swap.id,
+                    requestorUser: requester!,
+                    reqeustorBook: requesterBook!,
+                    requesteeUser: requestee!,
+                    requesteeBook: requesteeBook2!
+                }
+                this.setSwapHistory(swapHistory)
+            })
+           
+            this.setLoadingInitial(false)
+        }catch (error) {
+            console.log(error)
+            this.setLoadingInitial(false)
+        }
+
+    }
+
+    setSwapHistory(swap: SwapHistory) {
+        this.swapHistory.set(swap.swapId, swap)
     }
 
     createSwap = async (swap: BookSwap) => {

@@ -38,7 +38,7 @@ export default class UserStore {
     login = async (values: UserForm) => {
         try {
             const user = await agent.Account.login(values)
-            store.commonStore.setToken(user.token)
+            store.commonStore.setToken(user.token!)
             runInAction(() => this.user = user)
             history.push('/books')
         } catch (error) {
@@ -57,7 +57,7 @@ export default class UserStore {
     register = async (values: UserForm) => {
         try {
             const user = await agent.Account.register(values)
-            store.commonStore.setToken(user.token)
+            store.commonStore.setToken(user.token!)
             runInAction(() => this.user = user)
             history.push('/books')
         } catch (error) {

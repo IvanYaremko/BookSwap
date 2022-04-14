@@ -11,7 +11,7 @@ export default observer(function CustomSearch() {
     const [results, setResults] = useState<Book[]>()
     const [value, setValue] = useState('');
     const { bookStore } = useStore()
-    const { marketBooks } = bookStore
+    const { bookMap } = bookStore
 
     const resultRenderer = () => (
         <>
@@ -35,7 +35,7 @@ export default observer(function CustomSearch() {
     const handleSearchChange = (e: any) => {
         let value = e.target.value;
         setValue(value);
-        var match = Array.from(marketBooks.values()).filter(book => book.title === value)
+        var match = Array.from(bookMap.values()).filter(book => book.title === value)
 
         setResults(match);
     }

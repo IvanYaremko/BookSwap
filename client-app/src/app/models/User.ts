@@ -4,7 +4,7 @@ export interface User {
     id: string
     userName: string
     displayName: string
-    token: string
+    token?: string
     county: string
 }
 
@@ -20,6 +20,7 @@ export interface UserBook {
     userId?: string
     displayname?: string
     userName?: string
+    email?: string
     county?: string
     books?: Book[]
     swapId?: string

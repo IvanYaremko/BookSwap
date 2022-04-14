@@ -1,20 +1,16 @@
 import { observer } from "mobx-react-lite";
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Card, Grid, Item, Segment } from "semantic-ui-react";
-import LoadingComponent from "../../app/layout/LoadingComponent";
-import { useStore } from "../../app/stores/Store";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
+import { useStore } from "../../../app/stores/Store";
 
 export default observer(function Profile() {
-    const { userStore } = useStore()
-    const { user } = userStore
     const [target, setTarget] = useState('')
     const { bookStore } = useStore()
-    const { deleteBook, ownedBooks, loading, loadBooks, bookMap } = bookStore
+    const { deleteBook, ownedBooks, loading} = bookStore
 
-    useEffect(() => {
-        if(bookMap.size <= 1) loadBooks()
-       },[bookMap.size, loadBooks])
+   
 
     function handleBookDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
         setTarget(e.currentTarget.name)
@@ -25,11 +21,8 @@ export default observer(function Profile() {
 
     return (
         <>
-            <Grid columns={2}>
-                <Grid.Row>
-
-                    <Grid.Column>
-                        <Card.Header><h3>{user!.userName}'s books</h3></Card.Header>
+          
+                        <Card.Header><h3>Your books</h3></Card.Header>
                         <Segment>
                             <Item.Group divided>
                                 {ownedBooks.map(book => (
@@ -66,9 +59,7 @@ export default observer(function Profile() {
 
                             </Item.Group>
                         </Segment>
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
+                 
         </>
     )
 })

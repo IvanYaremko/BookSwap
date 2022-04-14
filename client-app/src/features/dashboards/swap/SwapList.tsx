@@ -1,9 +1,8 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { Link } from "react-router-dom";
 import { Button, Item, Segment } from "semantic-ui-react";
-import { Book } from "../../app/models/Book";
-import { useStore } from "../../app/stores/Store";
+import { Book } from "../../../app/models/Book";
+import { useStore } from "../../../app/stores/Store";
 
 
 export default observer(function SwapList() {
@@ -14,7 +13,6 @@ export default observer(function SwapList() {
     function handleCancle(book: Book) {
         let swap = getSwapFromBookId(book.id)
         let swapId = swap.id
-        console.log(swapId)
         deleteSwap(swapId)
     }
     

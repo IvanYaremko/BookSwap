@@ -30,8 +30,7 @@ namespace Application.Books
             {
                 var book = await _context.Books.FindAsync(request.Id);
                 // if (book == null) return null;
-                
-                _context.Remove(book);
+                book.IsMarket = false;
                 await _context.SaveChangesAsync();
                 return Unit.Value;
             }

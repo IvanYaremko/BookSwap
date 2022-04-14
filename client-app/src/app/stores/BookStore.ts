@@ -20,14 +20,9 @@ export default class BookStore {
         makeAutoObservable(this)
     }
 
-    get marketBooks() {
-        let bookArray = Array.from(this.bookMap.values()).filter(book => book.appUserId !== store.userStore.user!.id)
-        return bookArray
-    }
-
     get ownedBooks() {
         this.setLoadingInitial(true)
-        var books = Array.from(this.bookMap.values()).filter(book => book.appUserId === store.userStore.user!.id)
+        let books = Array.from(this.bookMap.values()).filter(book => book.appUserId === store.userStore.user!.id)
         this.setLoadingInitial(false)
         return books
     }
@@ -36,9 +31,10 @@ export default class BookStore {
         this.setLoadingInitial(true)
         try {
             const books = await agent.Books.list()
-            books.forEach(book => {
+            books.filter(book => book.isMarket === true).forEach(book => {
                 this.setBook(book)
             })
+          
             this.setLoadingInitial(false)
 
         } catch (error) {
@@ -57,7 +53,6 @@ export default class BookStore {
             this.setLoadingInitial(true)
             try {
                 book = await agent.Books.details(id)
-                this.setBook(book)
                 runInAction(() => {
                     this.selectedBook = book
                 })
@@ -158,6 +153,7 @@ export default class BookStore {
                     isbn13: book.isbn13,
                     image: book.image,
                     county: "carlow",
+                    isMarket: true,
                     appUserId: store.userStore.user!.id
                 }
                 runInAction(() => {

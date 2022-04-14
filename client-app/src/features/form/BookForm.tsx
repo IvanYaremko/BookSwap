@@ -29,6 +29,7 @@ export default observer(function BookForm() {
         isbn13: "",
         image: "",
         county: user!.county,
+        isMarket: true,
         appUserId: ""
     })
 

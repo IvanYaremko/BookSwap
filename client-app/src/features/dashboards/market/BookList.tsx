@@ -2,12 +2,12 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Item, Segment } from "semantic-ui-react";
-import { useStore } from "../../app/stores/Store";
+import { useStore } from "../../../app/stores/Store";
 
 
 export default observer(function BookList() {
-    const { bookStore } = useStore()
-    const { marketBooks, county } = bookStore
+    const { bookStore, userStore } = useStore()
+    const { bookMap, county } = bookStore
 
 
 
@@ -15,7 +15,7 @@ export default observer(function BookList() {
         <>
             <Segment>
                 <Item.Group divided>
-                    {marketBooks.filter(book => book.county.toLowerCase() === county?.toLowerCase()).map( book => (
+                    {Array.from(bookMap.values()).filter(book => book.county.toLowerCase() === county?.toLowerCase() && book.appUserId !== userStore.user?.id).map(book => (
                         <Item key={book.id}>
                             <Item.Image
                                 size='tiny'

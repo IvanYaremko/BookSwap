@@ -14,13 +14,12 @@ export default observer(function BookDetails() {
     const { bookStore, userStore, swapStore } = useStore()
     const { selectedBook: book, loadBook, loadingInitial } = bookStore
     const { user } = userStore
-    const { createSwap} = swapStore
+    const { createSwap, swapMap} = swapStore
     const { id } = useParams<{ id: string }>()
 
     useEffect(() => {
         if (id) loadBook(id)
-
-    }, [id, loadBook])
+    }, [id, loadBook ])
 
     function handleSwapRequest() {
         let swap: BookSwap = {
@@ -51,9 +50,18 @@ export default observer(function BookDetails() {
                 </Card.Description>
             </Card.Content>
             <Card.Content extra>
-                <Button.Group widths='2'>
-                    <Button size="tiny" as={Link} to={`/books`} color='green' content='Request swap' onClick={handleSwapRequest} />
-                </Button.Group>
+                {console.log(swapMap.get("dcd0e50c-2c73-44dd-ba33-a3a406dbf5e1"))}
+                {console.log(Array.from(swapMap.values()).filter(swap => swap.ownerBookID === book.id && swap.requesterID === user?.id).length)}
+                {Array.from(swapMap.values()).filter(swap => swap.ownerBookID === book.id && swap.requesterID === user?.id).length >= 1
+                    ?
+                    <Button.Group widths='2'>
+                        <Button size="tiny" as={Link} to={`/books`} color='red' content='Already requested'/>
+                    </Button.Group>
+                    :
+                    <Button.Group widths='2'>
+                        <Button size="tiny" as={Link} to={`/books`} color='green' content='Request swap' onClick={handleSwapRequest} />
+                    </Button.Group>
+                }
             </Card.Content>
         </Card>
 

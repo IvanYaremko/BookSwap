@@ -1,16 +1,16 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { Button, Grid, Item, Segment } from "semantic-ui-react";
-import LoadingComponent from "../../app/layout/LoadingComponent";
-import { Book } from "../../app/models/Book";
-import { UserBook } from "../../app/models/User";
-import { useStore } from "../../app/stores/Store";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
+import { Book } from "../../../app/models/Book";
+import { useStore } from "../../../app/stores/Store";
 
 export default observer(function RequestorBookList() {
     const history = useHistory()
-    const { swapStore, userStore } = useStore()
-    const { selectedRequestor: user, loadingInitial, loadSwap, selectedSwap: swap, updateSwap, loadSwaps } = swapStore
+    const { swapStore, bookStore } = useStore()
+    const { selectedRequestor: user, loadingInitial, loadSwap, selectedSwap: swap, updateSwap, deleteSwap  } = swapStore
+    const { deleteBook } = bookStore
     const { id } = useParams<{ id: string }>()
 
     useEffect(() => {
@@ -20,10 +20,17 @@ export default observer(function RequestorBookList() {
     function handleSwap(book: Book) {
         swap!.status = "confirmed"
         swap!.requesterBookID = book.id
-        loadSwaps()
-        updateSwap(swap!).then(() => history.push('/swaps'))
+        let myBookToDelete = bookStore.bookMap.get(swap?.ownerBookID!)
+
+        deleteBook(myBookToDelete?.id!)
+        deleteBook(book.id)
+        updateSwap(swap!).then(() => history.push('/books'))
     }
 
+    function handleDelete() {
+        deleteSwap(id).then(() => history.push('/books'))
+    }
+    
 
     if (loadingInitial || !user) return <LoadingComponent content="Loading users books..." />
 
@@ -53,9 +60,11 @@ export default observer(function RequestorBookList() {
                                 </Item>
                             ))}
                         </Item.Group>
+                      
                     </Segment>
+                    
                 </Grid.Row>
-
+                <Button content="Decline swap" color="red" onClick={handleDelete}/>
             </Grid>
         </>
     )
