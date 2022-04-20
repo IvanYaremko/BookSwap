@@ -10,4 +10,6 @@ public class AppUser : IdentityUser
     
     public ICollection<Book> Books { get; set; }
 
+    public ICollection<Photo> Photos { get; set; }
+
 }
