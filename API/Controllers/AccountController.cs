@@ -104,20 +104,33 @@ namespace API.Controllers
                 Token = tokenService.CreateToken(user),
                 County = user.County
 
-            }; 
+            };
         }
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserBook>> GetUser(Guid id){
+        public async Task<ActionResult<UserBook>> GetUser(Guid id)
+        {
             var user = await userManager.FindByIdAsync(id.ToString());
             var books = await context.Books.ToListAsync();
             List<Book> userBooks = new List<Book>();
 
-            foreach (Book b in books){
-                if(b.AppUserId == id.ToString()) userBooks.Add(b);
+            foreach (Book b in books)
+            {
+                if (b.AppUserId == id.ToString()) userBooks.Add(b);
             }
-               
+
+
+            var userPhotos = await context.Users.Include(user => user.Photos)
+                   .SingleOrDefaultAsync(u => u.UserName == user.UserName);
+
+            var mainImage = userPhotos!.Photos.ToArray().First((photo => photo.IsMain));
+
+            string image = new String("");
+            if(mainImage != null){
+                image = mainImage.Url;
+            }
+
             return new UserBook
             {
                 UserId = user.Id,
@@ -125,7 +138,8 @@ namespace API.Controllers
                 DisplayName = user.DisplayName,
                 Email = user.Email,
                 County = user.County,
-                Books = userBooks
+                Image = image,
+                Books = userBooks,
             };
         }
 
