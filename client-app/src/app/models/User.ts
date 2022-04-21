@@ -5,7 +5,8 @@ export interface User {
     userName: string
     displayName: string
     token?: string
-    county: string
+    county: string,
+    image?: string,
 }
 
 export interface UserForm {
@@ -23,5 +24,6 @@ export interface UserBook {
     email?: string
     county?: string
     books?: Book[]
-    swapId?: string
+    swapId?: string,
+    image?: string
 }

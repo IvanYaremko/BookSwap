@@ -26,13 +26,15 @@ namespace Application.Profiles
                     .SingleOrDefaultAsync(user => user.UserName == request.UserName);
                 var photos = await _context.Photos.ToListAsync();
 
-                var mainImage = user.Photos.ToArray().First((photo => photo.IsMain));
+                var isMainImage = user.Photos.ToArray().FirstOrDefault(photo => photo.IsMain);
+                string mainImage = "";
+                if(isMainImage != null) mainImage = isMainImage.Url;
 
                 var profile = new Profile
                 {
                     UserName = user.UserName,
                     DsiplayName = user.DisplayName,
-                    Image = mainImage.Url,
+                    Image = mainImage,
                     Photos = user.Photos
                 };
                 return profile;

@@ -16,13 +16,13 @@ import RegisterForm from '../../features/auth/RegisterForm';
 import MarketDashboard from '../../features/dashboards/market/MarketDashboard';
 import SwapDashboard from '../../features/dashboards/swap/SwapDashboard';
 import RequestorBookList from '../../features/dashboards/swap/RequestorBookList';
-import ProfileDashboard from '../../features/dashboards/profile/ProfileDashboard';
 import SwapHistoryDashboard from '../../features/dashboards/history/SwapHistoryDashboard';
+import ProfileDashboard from '../../features/dashboards/profile/ProfileDashboard';
 
 function App() {
   const location = useLocation()
   const { commonStore, userStore } = useStore()
-  
+
   useEffect(() => {
     if (commonStore.token) {
       userStore.getUser().finally(() => commonStore.setApplicationLoaded(true))
@@ -31,7 +31,7 @@ function App() {
     }
   }, [commonStore, userStore])
 
-  if(!commonStore.applicationLoaded) return <LoadingComponent content='loading application'/>
+  if (!commonStore.applicationLoaded) return <LoadingComponent content='loading application' />
 
   return (
     <>
@@ -40,7 +40,10 @@ function App() {
       <Route exact path='/login' component={LoginForm} />
       <Route exact path='/register' component={RegisterForm} />
       <Route
-        path={['/books', '/books/:id', '/edit/:id', '/edit', '/createBook', '/server-error', '/profile/:id', '/not-found', '/swaps', '/requestor/:id', '/history']}
+        path={['/books', '/books/:id', '/edit/:id', '/edit',
+          '/createBook', '/server-error', '/not-found',
+          '/swaps', '/requestor/:id', '/history',
+          '/profile/:username']}
         render={() => (
           <>
             <NavBar />
@@ -48,12 +51,12 @@ function App() {
               <Switch>
                 <Route exact path='/books' component={MarketDashboard} />
                 <Route path='/books/:id' component={BookDetails} />
-                <Route key={location.key} path={['/edit/:id','/edit',]} component={BookForm} />
+                <Route key={location.key} path={['/edit/:id', '/edit',]} component={BookForm} />
                 <Route path={'/createBook'} component={IsbnForm} />
-                <Route path={'/profile/:id'} component={ProfileDashboard} />
+                <Route path={'/profile/:username'} component={ProfileDashboard} />
                 <Route path={'/requestor/:id'} component={RequestorBookList} />
                 <Route path={'/swaps'} component={SwapDashboard} />
-                <Route path={'/history'} component={SwapHistoryDashboard}/>
+                <Route path={'/history'} component={SwapHistoryDashboard} />
                 <Route component={NotFound} />
               </Switch>
             </Container>
