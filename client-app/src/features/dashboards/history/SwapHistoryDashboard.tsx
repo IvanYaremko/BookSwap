@@ -20,7 +20,7 @@ export default observer(function SwapHistoryDashboard() {
         <>
             <Grid centered columns={1}>
                 <Grid.Column>
-                    <PastSwapsList />
+                    {Array.from(swapHistory.values()).length == 0 ? (<h3>No swaps made </h3>) : (<PastSwapsList />)}
                 </Grid.Column>
             </Grid>
         </>

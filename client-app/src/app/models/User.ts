@@ -16,6 +16,7 @@ export interface UserForm {
     displayName?: string
     userName?: string
     county?: string
+    bio?: string
 }
 
 export interface UserBook {

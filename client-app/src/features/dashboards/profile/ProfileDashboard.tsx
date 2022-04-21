@@ -14,7 +14,6 @@ export default observer(function ProfileDashboard() {
 
     useEffect(() => {
         loadProfile(username)
-        console.log(username)
     }, [loadProfile, username])
 
     if (loadingProfile) return <LoadingComponent content="Loading profile" />

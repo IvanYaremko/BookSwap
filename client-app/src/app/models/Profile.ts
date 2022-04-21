@@ -6,6 +6,7 @@ export interface Profile {
     image?: string
     photos?: Photo[]
     bio: string
+    county?: string
 }
 
 export class Profile implements Profile {
@@ -14,6 +15,7 @@ export class Profile implements Profile {
         this.displayName = user.displayName
         this.image = user.image
         this.bio = user.bio
+        this.county = user.county
     }
 }
 

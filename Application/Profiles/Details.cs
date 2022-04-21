@@ -36,7 +36,8 @@ namespace Application.Profiles
                     DsiplayName = user.DisplayName,
                     Image = mainImage,
                     Photos = user.Photos,
-                    Bio = user.Bio
+                    Bio = user.Bio,
+                    County = user.County
                 };
                 return profile;
             }
