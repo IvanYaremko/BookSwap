@@ -35,7 +35,8 @@ namespace Application.Profiles
                     UserName = user.UserName,
                     DsiplayName = user.DisplayName,
                     Image = mainImage,
-                    Photos = user.Photos
+                    Photos = user.Photos,
+                    Bio = user.Bio
                 };
                 return profile;
             }

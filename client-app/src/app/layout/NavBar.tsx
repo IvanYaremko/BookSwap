@@ -20,7 +20,8 @@ export default observer(function NavBar() {
                 <Menu.Item as={NavLink} to='/history' positive content='History' /> 
                 <Menu.Item as={NavLink} to={`/profile/${user?.userName}`} positive content='Profile' /> 
                 <Menu.Item position="right">
-                    <Image src={user?.image } avatar/>
+                    {user?.image ? ( <Image src={user?.image } avatar/>) : (<Icon name="user"/>)}
+                   
                     <Dropdown text={user?.userName}>
                         <Dropdown.Menu>
                             <Dropdown.Item onClick={logout} text='logout' icon='power' />

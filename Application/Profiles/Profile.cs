@@ -8,6 +8,8 @@ namespace Application.Profiles
         public string UserName { get; set; }
         public string DsiplayName { get; set; }
         public string Image { get; set; }
+
+        public string Bio { get; set; }
         public ICollection<Photo> Photos { get; set; }
     }
 }

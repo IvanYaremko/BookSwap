@@ -8,7 +8,7 @@ export default observer(function ProfileDetails() {
 
     return (
         <Tab.Pane>
-
+            <h1>{profile?.bio}</h1>
         </Tab.Pane>
     )
 })

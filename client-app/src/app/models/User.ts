@@ -7,6 +7,7 @@ export interface User {
     token?: string
     county: string,
     image?: string,
+    bio: string
 }
 
 export interface UserForm {

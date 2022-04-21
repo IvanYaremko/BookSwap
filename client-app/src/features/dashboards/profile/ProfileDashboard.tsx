@@ -10,7 +10,7 @@ import ProfileHeader from "./ProfileHeader";
 export default observer(function ProfileDashboard() {
     const { username } = useParams<{ username: string }>()
     const { profileStore } = useStore();
-    const { loadingProfile, loadProfile, profile } = profileStore
+    const { loadingProfile, loadProfile } = profileStore
 
     useEffect(() => {
         loadProfile(username)

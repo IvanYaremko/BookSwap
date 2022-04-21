@@ -97,7 +97,10 @@ namespace API.Controllers
             var user = await userManager.Users.Include(u => u.Photos)
             .FirstOrDefaultAsync(user => user.Email == User.FindFirstValue(ClaimTypes.Email));
 
-            var image = user.Photos.FirstOrDefault(p => p.IsMain);
+            var isImage = user.Photos.FirstOrDefault(p => p.IsMain);
+            string mainImage = "";
+
+            if(isImage != null) mainImage = isImage.Url;
             return new UserDto
             {
                 Id = user.Id,
@@ -105,7 +108,7 @@ namespace API.Controllers
                 DisplayName = user.DisplayName,
                 Token = tokenService.CreateToken(user),
                 County = user.County,
-                Image = image.Url
+                Image = mainImage
             };
         }
 
