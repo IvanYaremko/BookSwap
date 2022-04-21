@@ -94,16 +94,18 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            var user = await userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            var user = await userManager.Users.Include(u => u.Photos)
+            .FirstOrDefaultAsync(user => user.Email == User.FindFirstValue(ClaimTypes.Email));
 
+            var image = user.Photos.FirstOrDefault(p => p.IsMain);
             return new UserDto
             {
                 Id = user.Id,
                 UserName = user.UserName,
                 DisplayName = user.DisplayName,
                 Token = tokenService.CreateToken(user),
-                County = user.County
-
+                County = user.County,
+                Image = image.Url
             };
         }
 
@@ -111,26 +113,17 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UserBook>> GetUser(Guid id)
         {
-            var user = await userManager.FindByIdAsync(id.ToString());
+            var user = await userManager.Users.Include(u => u.Photos)
+                        .FirstOrDefaultAsync(user => user.Id == id.ToString());
+
             var books = await context.Books.ToListAsync();
             List<Book> userBooks = new List<Book>();
-
             foreach (Book b in books)
             {
                 if (b.AppUserId == id.ToString()) userBooks.Add(b);
             }
 
-
-            var userPhotos = await context.Users.Include(user => user.Photos)
-                   .SingleOrDefaultAsync(u => u.UserName == user.UserName);
-
-            var mainImage = userPhotos!.Photos.ToArray().First((photo => photo.IsMain));
-
-            string image = new String("");
-            if(mainImage != null){
-                image = mainImage.Url;
-            }
-
+            var mainImage = user.Photos.FirstOrDefault(p => p.IsMain);
             return new UserBook
             {
                 UserId = user.Id,
@@ -138,7 +131,7 @@ namespace API.Controllers
                 DisplayName = user.DisplayName,
                 Email = user.Email,
                 County = user.County,
-                Image = image,
+                Image = mainImage.Url,
                 Books = userBooks,
             };
         }
