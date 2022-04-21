@@ -25,5 +25,6 @@ public class DataContext : IdentityDbContext<AppUser>
 
     public DbSet<BookSwap> Swaps { get; set; }
 
+    public DbSet<Photo> Photos { get; set; }
 
 }

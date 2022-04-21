@@ -44,6 +44,7 @@ export default class SwapStore {
         return swapHistory
     }
 
+
     loadRequestors = async () => {
         this.setLoadingInitial(true)
         try {

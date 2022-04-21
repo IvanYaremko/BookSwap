@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { Book } from "../models/Book";
 import { BookSwap } from "../models/BookSwap";
+import { Photo, Profile } from "../models/Profile";
 import { User, UserBook, UserForm } from "../models/User";
 import { store } from "../stores/Store";
 
@@ -74,10 +75,26 @@ const Swaps = {
     delete: (id: string) => requests.del<void>(`/swap/${id}`)
 }
 
+const Profiles = {
+    get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
+    uploadPhoto: (file: any) => {
+        let formData = new FormData()
+        formData.append('File', file);
+        return axios.post<Photo>('photos', formData, {
+            headers: {
+                'Content-type': 'multipart/form-data'
+            }
+        })
+    },
+    setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
+    deletePhoto: (id: string) => requests.del(`/photos/${id}`)
+}
+
 const agent = {
     Books,
     Account,
-    Swaps
+    Swaps,
+    Profiles
 }
 
 export default agent

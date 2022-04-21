@@ -1,4 +1,5 @@
 using Application.Books;
+using Application.Photos;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -31,6 +32,8 @@ namespace API.Extensions
             });
             // This service tell MediatR where to find handlesr
             services.AddMediatR(typeof(List.Handler).Assembly);
+            services.AddScoped<IPhoto, PhotoAccessor>();
+            services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
 
             return services;
         }

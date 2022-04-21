@@ -94,30 +94,39 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            var user = await userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            var user = await userManager.Users.Include(u => u.Photos)
+            .FirstOrDefaultAsync(user => user.Email == User.FindFirstValue(ClaimTypes.Email));
 
+            var isImage = user.Photos.FirstOrDefault(p => p.IsMain);
+            string mainImage = "";
+
+            if(isImage != null) mainImage = isImage.Url;
             return new UserDto
             {
                 Id = user.Id,
                 UserName = user.UserName,
                 DisplayName = user.DisplayName,
                 Token = tokenService.CreateToken(user),
-                County = user.County
-
-            }; 
+                County = user.County,
+                Image = mainImage
+            };
         }
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserBook>> GetUser(Guid id){
-            var user = await userManager.FindByIdAsync(id.ToString());
+        public async Task<ActionResult<UserBook>> GetUser(Guid id)
+        {
+            var user = await userManager.Users.Include(u => u.Photos)
+                        .FirstOrDefaultAsync(user => user.Id == id.ToString());
+
             var books = await context.Books.ToListAsync();
             List<Book> userBooks = new List<Book>();
-
-            foreach (Book b in books){
-                if(b.AppUserId == id.ToString()) userBooks.Add(b);
+            foreach (Book b in books)
+            {
+                if (b.AppUserId == id.ToString()) userBooks.Add(b);
             }
-               
+
+            var mainImage = user.Photos.FirstOrDefault(p => p.IsMain);
             return new UserBook
             {
                 UserId = user.Id,
@@ -125,7 +134,8 @@ namespace API.Controllers
                 DisplayName = user.DisplayName,
                 Email = user.Email,
                 County = user.County,
-                Books = userBooks
+                Image = mainImage.Url,
+                Books = userBooks,
             };
         }
 

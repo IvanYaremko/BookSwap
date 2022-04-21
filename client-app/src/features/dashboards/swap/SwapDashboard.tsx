@@ -13,10 +13,10 @@ export default observer(function SwapDashboard() {
     const { loadBooks, bookMap, booksRequested, loadBooksRequestedFromMe } = bookStore
 
     useEffect(() => {
-        if (bookMap.size <= 1) loadBooks()
-        if (swapMap.size <= 1) loadSwaps()
-        if (requestorMap.size <= 1) loadRequestors()
-        if (booksRequested.size <= 1) loadBooksRequestedFromMe()
+        loadBooks()
+        loadSwaps()
+        loadRequestors()
+        loadBooksRequestedFromMe()
     }, [swapMap.size, swapMap, loadSwaps, bookMap.size, bookMap, loadBooks, requestorMap.size, requestorMap, loadRequestors, booksRequested, booksRequested.size, loadBooksRequestedFromMe])
 
 
