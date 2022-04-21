@@ -49,7 +49,7 @@ export default observer(function ProfilePhotos() {
                         )
                         : (
                             <Card.Group itemsPerRow={5} >
-                                {profile?.photos?.map(photo => (
+                                {profile?.photos?.map((photo: Photo) => (
                                     <Card key={photo.id}>
                                         <Image src={photo.url} />
                                         {isCurrentUser && (

@@ -21,5 +21,11 @@ namespace API.Controllers
         {
             return Ok(await mediator.Send(new Details.Query { UserName = username }));
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateProfile(Profile profile)
+        {
+            return Ok(await mediator.Send(new UpdateProfile.Command{Profile = profile}));
+        }
     }
 }

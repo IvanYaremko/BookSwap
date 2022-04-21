@@ -5,7 +5,7 @@ import { Button, Card, Grid, Item, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/Store";
 
-export default observer(function Profile() {
+export default observer(function ProfileBooks() {
     const [target, setTarget] = useState('')
     const { bookStore } = useStore()
     const { deleteBook, ownedBooks, loading} = bookStore

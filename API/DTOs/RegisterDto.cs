@@ -14,6 +14,7 @@ namespace API.DTOs
         [Required]
         public string DisplayName { get; set; }
         public string UserName { get; set; }
+        public string Bio { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; }
