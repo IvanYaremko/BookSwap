@@ -10,8 +10,8 @@ export default observer(function SwapHistoryDashboard() {
     const {loadSwapHistory, swapHistory, swapMap, loadSwaps, loadingInitial} = swapStore
 
     useEffect(() => {
-        if (swapMap.size <= 1) loadSwaps()
-        if(swapHistory.size <= 1) loadSwapHistory()
+        loadSwaps()
+        loadSwapHistory()
     }, [swapHistory, swapHistory.size, loadSwapHistory, swapMap,swapMap.size, loadSwaps])
 
 

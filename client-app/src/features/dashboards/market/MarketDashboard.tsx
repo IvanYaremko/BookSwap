@@ -28,8 +28,8 @@ export default observer(function MarketDashboard() {
     }
 
     useEffect(() => {
-        if (bookMap.size <= 1) loadBooks()
-        if (swapMap.size <= 1) loadSwaps()
+        loadBooks()
+        // if (swapMap.size <= 1) loadSwaps()
         if (county === undefined) setCounty(user?.county!)
     }, [bookMap.size, loadBooks, county, setCounty, user?.county, swapMap.size, swapMap, loadSwaps])
 
