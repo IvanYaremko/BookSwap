@@ -25,7 +25,7 @@ export default class BookStore {
         this.setLoadingInitial(true)
         try {
             const books = await agent.Books.list()
-            books.filter(book => book.isMarket === true).forEach(book => {
+            books.forEach(book => {
                 this.setBook(book)
             })
           
@@ -140,6 +140,7 @@ export default class BookStore {
             await agent.Books.delete(id)
             runInAction(() => {
                 this.bookMap.delete(id)
+                this.booksOwnedMap.delete(id)
                 this.loading = false
             })
         } catch (error) {

@@ -35,7 +35,7 @@ namespace Application.Books
             /// <returns>A Result object containing either a book object retrieved from the database or null</returns>
             public async Task<List<Book>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _context.Books.ToListAsync();
+                return await _context.Books.Where(book => book.IsMarket).ToListAsync();
             }
         }
     }

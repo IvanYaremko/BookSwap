@@ -32,7 +32,7 @@ namespace Application.Books
                 
                 foreach(Book b in books)
                 {
-                    if(b.AppUserId == request.Id.ToString()) {
+                    if(b.AppUserId == request.Id.ToString() && b.IsMarket) {
                         myBooks.Add(b);
                     }
                 }
