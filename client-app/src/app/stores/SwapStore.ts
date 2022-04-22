@@ -1,72 +1,80 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { Book } from "../models/Book";
 import { BookSwap } from "../models/BookSwap";
-import { SwapHistory } from "../models/SwapHistory";
-import {  UserBook } from "../models/User";
-import { store } from "./Store";
+import { SwapRequests } from "../models/SwapRequests";
+import { UserBook } from "../models/User";
 
 
 
 export default class SwapStore {
+    // Map of all the swaps
     swapMap = new Map<string, BookSwap>()
-    requestorMap = new Map<string, UserBook>()
-    swapHistory = new Map<string, SwapHistory>()
     selectedSwap: BookSwap | undefined = undefined
+
+    // Map of all the swaps being requested of the current user
+    requestedMap = new Map<string, SwapRequests>()
+    requestDetails: SwapRequests | undefined = undefined
+    // Map of all the swaps the current user is requesting
+    myRequestsMap = new Map<string, SwapRequests>()
+    // history of users Swaps
+    historyMap = new Map<string, SwapRequests>()
+
     selectedRequestor: UserBook | undefined = undefined
     sumbittedSwap!: BookSwap
     editSwap = false
     loading = false
     loadingInitial = false
-    swapDetails: Boolean = false
 
     constructor() {
         makeAutoObservable(this)
     }
 
-    get booksRequestedFromMe() {
-        let requestorArray = Array.from(this.requestorMap.values())
-        return requestorArray
-    }
+    loadRequested = async (id: string) => {
+        this.loading = true
 
-   
-    get booksIRequest() {
-        this.setLoadingInitial(true)
-        var swaps = Array.from(this.swapMap.values()).filter(swap => swap.requesterID === store.userStore.user!.id && swap.status === "request")
-        var books: Book[] = []
-        swaps.forEach(swap => books.push(store.bookStore.getBook(swap.ownerBookID)!))
-        this.setLoadingInitial(false)
-        return books
-    }
-
-    get swapHistoryArray() {
-        let swapHistory = Array.from(this.swapHistory.values())
-        return swapHistory
-    }
-
-
-    loadRequestors = async () => {
-        this.setLoadingInitial(true)
         try {
-            const mySwaps = Array.from(this.swapMap.values()).filter(swap => swap.ownerID === store.userStore.user!.id && swap.status === "request")
-            mySwaps.forEach(swap => {
-                let userBook = this.loadUserWithBook(swap.requesterID);
-                userBook.then(values => {
-                    values!.swapId = swap.id
-                    this.setRequestorSwap(values!)
-                })
+            const requestedFromMe = await agent.Swaps.listRequested(id)
+            requestedFromMe.forEach(r => {
+                this.requestedMap.set(r.swapId, r)
             })
-            this.setLoadingInitial(false)
-        }catch (error) {
+            runInAction(() => this.loading = false)
+        } catch (error) {
             console.log(error)
-            this.setLoadingInitial(false)
+            runInAction(() => this.loading = false)
         }
     }
 
-    loadUserWithBook = async (id: string) => {
-        return await store.userStore.getUserById(id);
+    loadMyRequests = async (id: string) => {
+        this.loadingInitial = true
+
+        try {
+            const myRequests = await agent.Swaps.listMyRequests(id)
+            myRequests.forEach(r => {
+                this.myRequestsMap.set(r.swapId, r)
+            })
+            runInAction(() => this.loading = false)
+
+        } catch (error) {
+            console.log(error)
+            runInAction(() => this.loading = false)
+        }
     }
 
+    loadHistory = async (id: string) => {
+        this.loading = true
+
+        try {
+            const history = await agent.Swaps.listHistory(id)
+            history.forEach(h => {
+                this.historyMap.set(h.swapId, h)
+            })
+            runInAction(() => this.loading = false)
+
+        } catch (error) {
+            console.log(error)
+            runInAction(() => this.loading = false)
+        }
+    }
 
     loadSwaps = async () => {
         this.setLoadingInitial(true)
@@ -75,12 +83,15 @@ export default class SwapStore {
             swaps.forEach(swap => {
                 this.setSwap(swap)
             })
-            this.setLoadingInitial(false)
-
+            runInAction(() => this.setLoadingInitial(false))
         } catch (error) {
             console.log(error)
-            this.setLoadingInitial(false)
+            runInAction(() => this.setLoadingInitial(false))
         }
+    }
+
+    loadRequest = (id: string) => {
+        return this.requestedMap.get(id)
     }
 
     loadSwap = async (id: string) => {
@@ -104,40 +115,6 @@ export default class SwapStore {
                 this.setLoadingInitial(false)
             }
         }
-    }
-
-    loadSwapHistory = async () => {
-        this.setLoadingInitial(true)
-        try {
-            const mySwaps = Array.from(this.swapMap.values()).filter(swap => swap.ownerID === store.userStore.user!.id && swap.status === "confirmed")
-            mySwaps.forEach(async swap => {
-                let requester = await store.userStore.getUserById(swap.requesterID)
-
-                let requestee =  await store.userStore.getUserById(swap.ownerID)
-
-                let requesterBook = await store.bookStore.loadBook(swap.requesterBookID)
-                let requesteeBook2 = await store.bookStore.loadBook(swap.ownerBookID)
-
-                let swapHistory: SwapHistory = {
-                    swapId: swap.id,
-                    requestorUser: requester!,
-                    reqeustorBook: requesterBook!,
-                    requesteeUser: requestee!,
-                    requesteeBook: requesteeBook2!
-                }
-                this.setSwapHistory(swapHistory)
-            })
-           
-            this.setLoadingInitial(false)
-        }catch (error) {
-            console.log(error)
-            this.setLoadingInitial(false)
-        }
-
-    }
-
-    setSwapHistory(swap: SwapHistory) {
-        this.swapHistory.set(swap.swapId, swap)
     }
 
     createSwap = async (swap: BookSwap) => {
@@ -200,27 +177,12 @@ export default class SwapStore {
         this.swapMap.set(swap.id!, swap)
     }
 
-    private setRequestorSwap = (user: UserBook) => {
-
-        this.requestorMap.set(user.userId!, user)
-    }
-    
-    setRequestor = (id: string) => {
-        this.selectedRequestor = this.requestorMap.get(id)
+    setRequestDetails(request: SwapRequests) {
+        this.requestDetails! = request
     }
 
     getSwap = (id: string) => {
         return this.swapMap.get(id)
     }
 
-    
-    getSwapFromBookId = (id: string) => {
-        let swapArray = Array.from(this.swapMap.values()).filter(swap => swap.ownerBookID === id)
-        console.log(swapArray)
-        return swapArray[0]
-    }
-
-    setSwapDetails(value: boolean) {
-        this.swapDetails = value
-    }
 }

@@ -2,8 +2,6 @@ import { observer } from "mobx-react-lite";
 import { SyntheticEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Card, Grid, Image, Tab } from "semantic-ui-react";
-import BookStore from "../../../app/stores/BookStore";
-import ProfileStore from "../../../app/stores/ProfileStore";
 import { useStore } from "../../../app/stores/Store";
 
 export default observer(function ProfileBooksOwned() {
@@ -36,7 +34,7 @@ export default observer(function ProfileBooksOwned() {
                                             basic
                                             color="red"
                                             icon="trash"
-                                            loading={target == book.id && loading}
+                                            loading={target === book.id && loading}
                                             onClick={event => handleBookDelete(event, book.id)}
                                         />
                                     </>

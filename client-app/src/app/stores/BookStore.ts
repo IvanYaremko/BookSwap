@@ -8,7 +8,6 @@ import { store } from "./Store";
 
 export default class BookStore {
     bookMap = new Map<string, Book>()
-    booksRequested = new Map<String, Book>()
     booksOwnedMap = new Map<String, Book>()
     selectedBook: Book | undefined = undefined
     submittingBook!: Book
@@ -77,14 +76,6 @@ export default class BookStore {
         }
     }
 
-    loadBooksRequestedFromMe=()=>{
-        let MySwaps = Array.from(store.swapStore.swapMap.values()).filter(swap => swap.ownerID === store.userStore.user?.id)
-        MySwaps.forEach(swap => {
-            let book = this.getBook(swap.ownerBookID)
-            this.booksRequested.set(swap!.id, book!)
-        })
-        
-    }
 
     private setBook = (book: Book) => {
         this.bookMap.set(book.id!, book)

@@ -6,21 +6,20 @@ import { useStore } from "../../../app/stores/Store";
 import PastSwapsList from "./PastSwapsList";
 
 export default observer(function SwapHistoryDashboard() {
-    const { swapStore } = useStore()
-    const {loadSwapHistory, swapHistory, swapMap, loadSwaps, loadingInitial} = swapStore
+    const { swapStore, userStore } = useStore()
+    const {loadHistory, loading, historyMap} = swapStore
 
     useEffect(() => {
-        loadSwaps()
-        loadSwapHistory()
-    }, [swapHistory, swapHistory.size, loadSwapHistory, swapMap,swapMap.size, loadSwaps])
+        loadHistory(userStore.user!.id)
+    }, [loadHistory, userStore.user])
 
 
-    if (loadingInitial) return <LoadingComponent content="Loading history" />
+    if (loading) return <LoadingComponent content="Loading history" />
     return (
         <>
             <Grid centered columns={1}>
-                <Grid.Column>
-                    {Array.from(swapHistory.values()).length == 0 ? (<h3>No swaps made </h3>) : (<PastSwapsList />)}
+                <Grid.Column width={16}>
+                    {Array.from(historyMap.values()).length === 0 ? (<h3>No swaps made </h3>) : (<PastSwapsList />)}
                 </Grid.Column>
             </Grid>
         </>

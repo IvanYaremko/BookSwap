@@ -1,41 +1,12 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { toast } from "react-toastify";
+import axios, {  AxiosResponse } from "axios";
 import { Book } from "../models/Book";
 import { BookSwap } from "../models/BookSwap";
 import { Photo, Profile } from "../models/Profile";
+import { SwapRequests } from "../models/SwapRequests";
 import { User, UserBook, UserForm } from "../models/User";
 import { store } from "../stores/Store";
 
-const sleep = (delay: number) => {
-    return new Promise((resolve) => {
-        setTimeout(resolve, delay)
-    })
-}
-
 axios.defaults.baseURL = 'http://localhost:5000/api'
-
-
-axios.interceptors.response.use(async response => {
-    await sleep(1000);
-    return response;
-}, (error: AxiosError) => {
-    const { status } = error.response!
-    switch (status) {
-        case 400:
-            toast.error('not found')
-            break
-        case 401:
-            toast.error('not found')
-            break   
-        case 404:
-            toast.error('not found')
-            break
-        case 500:
-            toast.error('not found')
-            break
-    }
-    return Promise.reject(error)
-})
 
 axios.interceptors.request.use(config => {
     const token = store.commonStore.token
@@ -70,6 +41,9 @@ const Account = {
 
 const Swaps = {
     list: () => requests.get<BookSwap[]>('/swap'),
+    listRequested: (id: string) => requests.get<SwapRequests[]>(`/swap/${id}/rm`),
+    listMyRequests: (id: string) => requests.get<SwapRequests[]>(`/swap/${id}/ir`),
+    listHistory: (id: string) => requests.get<SwapRequests[]>(`/swap/${id}/history`),
     details: (id: string) => requests.get<BookSwap>(`/swap/${id}`),
     create: (swap: BookSwap) => requests.post<void>('/swap', swap),
     update: (id: string, swap: BookSwap) => requests.put<void>(`/swap/${id}`, swap),

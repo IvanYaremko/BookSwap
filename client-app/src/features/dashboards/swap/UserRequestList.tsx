@@ -1,44 +1,50 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Segment, Item, Grid, Icon } from "semantic-ui-react";
+import { Segment, Item, Grid, Icon, Image } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/Store";
 
 export default observer(function UserRequestList() {
-    const { swapStore, bookStore } = useStore()
-    const { booksRequestedFromMe, setRequestor } = swapStore
-    const { booksRequested } = bookStore
+    const { swapStore } = useStore()
+    const { requestedMap } = swapStore
 
 
     return (
         <>
-            <Segment >
-                <Item.Group divided relaxed>
-                    {booksRequestedFromMe.map(user => (
-                        <Grid columns={3}>
-                            <Grid.Column>
-                                <Item key={user.userId} style={{ marginLeft: "40%" }}>
-                                    <Item.Content verticalAlign='middle' style={{ maringTop: "25px" }} >
+            {requestedMap.size === 0 ? (
+                <h2>No swaps</h2>
+            ) : (
+                <Segment >
+                    <Item.Group divided>
+                        {Array.from(requestedMap.values()).map(request => (
+                            <Item key={request.swapId}>
+                                <Item.Content style={{marginLeft: "25px"}}>
+                                    {request.requestor.photos.length === 0 ? (
                                         <Icon name="user" size="big" />
-                                            <Item.Header>{user.userName}</Item.Header>
-                                        <Item.Content> {user.county} </Item.Content>
-                                    </Item.Content>
+                                    ) : (
+                                        <Image src={request.requestor.photos.find(image => image.isMain)?.url} size="tiny" />
+                                    )}
+                                    <Grid.Column width={1} />
+                                    <Item.Header>{request.requestor!.userName}</Item.Header>
+                                    <Grid.Column width={1} />
+                                    <Item.Content> {request.requestor!.county} </Item.Content>
+                                </Item.Content>
 
-                                </Item>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Link to={`/requestor/${user.swapId}`} onClick={() => setRequestor(user.userId!)}>
-                                    <Icon name="refresh" size="big" style={{ marginTop: "35px", marginLeft: "25px" }} />
-                                </Link>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Item.Image src={booksRequested.get(user!.swapId!)?.image} size="tiny" />
-                            </Grid.Column>
-                        </Grid>
-                    ))}
+                                <Item.Content>
+                                    <Link to={`/requestor/${request.swapId}`}>
+                                        <Icon name="arrows alternate horizontal" size="huge" style={{ marginTop: "35px", marginLeft: "25px" }} />
+                                    </Link>
+                                </Item.Content>
 
-                </Item.Group>
-            </Segment>
+                                <Item.Content>
+                                    <Item.Image src={request.ownerBook.image} size="tiny" />
+                                </Item.Content>
+                            </Item>
+                        ))}
+
+                    </Item.Group>
+                </Segment>
+            )}
         </>
     )
 })

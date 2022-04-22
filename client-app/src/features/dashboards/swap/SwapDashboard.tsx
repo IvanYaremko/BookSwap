@@ -8,39 +8,34 @@ import UserRequestList from "./UserRequestList";
 
 
 export default observer(function SwapDashboard() {
-    const { swapStore, bookStore } = useStore()
-    const { loadSwaps, swapMap, requestorMap, loadRequestors } = swapStore
-    const { loadBooks, bookMap, booksRequested, loadBooksRequestedFromMe } = bookStore
+    const { swapStore, bookStore, userStore } = useStore()
+    const { loadSwaps, loadRequested, loadMyRequests, loading, loadingInitial } = swapStore
+    const { loadBooks} = bookStore
 
     useEffect(() => {
         loadBooks()
         loadSwaps()
-        loadRequestors()
-        loadBooksRequestedFromMe()
-    }, [swapMap.size, swapMap, loadSwaps, bookMap.size, bookMap, loadBooks, requestorMap.size, requestorMap, loadRequestors, booksRequested, booksRequested.size, loadBooksRequestedFromMe])
+        loadRequested(userStore.user!.id)
+        loadMyRequests(userStore.user!.id)
+    }, [loadBooks, loadSwaps, loadRequested, loadMyRequests, userStore.user])
 
 
 
 
-    if (swapStore.loadingInitial || bookStore.loadingInitial) return <LoadingComponent content='Loading Swaps' />
+    if (loadingInitial || loading) return <LoadingComponent content='Loading Swaps' />
     return (
         <>
             <Grid centered columns={2}>
-                <Grid.Column>
+                <Grid.Column >
                     <h1>My requests</h1>
-                    {Array.from(swapMap.values()).filter(swap => swap.status === "request").length === 0
-                        ? <h3>No requests made</h3>
-                        : <SwapList />}
+                    <Grid.Row width={1}/>
+                    <SwapList />
 
                 </Grid.Column>
 
                 <Grid.Column>
                     <h1>Swap requests</h1>
-
-                    {requestorMap.size === 0
-                        ? <h3>No swaps to review </h3>
-                        : <UserRequestList />
-                    }
+                    <UserRequestList />
                 </Grid.Column>
             </Grid>
 
