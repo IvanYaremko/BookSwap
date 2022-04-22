@@ -5,7 +5,7 @@ import { useStore } from "../../../app/stores/Store";
 export default observer(function ProfileHeader() {
     const { bookStore, swapStore, profileStore } = useStore()
     const { booksOwnedMap } = bookStore
-    const { swapHistory } = swapStore
+    const { historyMap } = swapStore
     const { profile } = profileStore
     return (
         <>
@@ -40,7 +40,7 @@ export default observer(function ProfileHeader() {
                             </Item.Content>
                             <Item style={{ marginTop: '10px' }}>
                                 <Item.Content verticalAlign="middle">
-                                    <Header as="h3">{swapHistory.values.length} swaps made </Header>
+                                    <Header as="h3">{historyMap.values.length} swaps made </Header>
                                 </Item.Content>
                             </Item>
                         </Item>

@@ -1,49 +1,56 @@
 import { observer } from "mobx-react-lite";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { Button, Grid, Item, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { Book } from "../../../app/models/Book";
+import { SwapRequests } from "../../../app/models/SwapRequests";
 import { useStore } from "../../../app/stores/Store";
 
 export default observer(function RequestorBookList() {
     const history = useHistory()
     const { swapStore, bookStore } = useStore()
-    const { selectedRequestor: user, loadingInitial, loadSwap, selectedSwap: swap, updateSwap, deleteSwap  } = swapStore
+    const { loadRequest, updateSwap, deleteSwap, loadSwap, selectedSwap, loading } = swapStore
     const { deleteBook } = bookStore
     const { id } = useParams<{ id: string }>()
+    const [request, setRequest] = useState<SwapRequests>()
 
     useEffect(() => {
-        if (id) loadSwap(id)
-    }, [id, loadSwap])
+        if (id) {
+            let request = loadRequest(id)
+            setRequest(request)
+            loadSwap(id)
+        }
+    }, [id, loadRequest, loadSwap])
 
     function handleSwap(book: Book) {
-        swap!.status = "confirmed"
-        swap!.requesterBookID = book.id
-        let myBookToDelete = bookStore.bookMap.get(swap?.ownerBookID!)
+        selectedSwap!.status = "confirmed"
+        selectedSwap!.requesterBookID = book.id
+        let myBookToDelete = request?.ownerBook
 
         deleteBook(myBookToDelete?.id!)
         deleteBook(book.id)
-        updateSwap(swap!).then(() => history.push('/books'))
+        updateSwap(selectedSwap!).then(() => history.push('/books'))
     }
 
     function handleDelete() {
         deleteSwap(id).then(() => history.push('/books'))
     }
-    
 
-    if (loadingInitial || !user) return <LoadingComponent content="Loading users books..." />
+
+    if (request === undefined) return <LoadingComponent content="Loading users books..." />
 
     return (
         <>
+            {console.log(request)}
             <Grid centered>
                 <Grid.Row>
-                    <h1>{user.userName}'s books</h1>
+                    <h1>{request!.requestor.userName} book's</h1>
                 </Grid.Row>
                 <Grid.Row>
                     <Segment>
                         <Item.Group divided>
-                            {user.books?.map(book => (
+                            {request!.requestor.books?.map(book => (
                                 <Item key={book.id}>
                                     <Item.Image
                                         size='tiny'
@@ -55,16 +62,16 @@ export default observer(function RequestorBookList() {
                                         <Item.Content> {book.author} </Item.Content>
                                     </Item.Content>
                                     <Grid.Column>
-                                        <Button content="swap" style={{marginTop:'75px'}} color='blue' onClick={() => handleSwap(book)}/>
+                                        <Button content="swap" style={{ marginTop: '75px' }} color='blue' onClick={() => handleSwap(book)} loading={loading} />
                                     </Grid.Column>
                                 </Item>
                             ))}
                         </Item.Group>
-                      
+
                     </Segment>
-                    
+
                 </Grid.Row>
-                <Button content="Decline swap" color="red" onClick={handleDelete}/>
+                <Button content="Decline swap" color="red" onClick={handleDelete} />
             </Grid>
         </>
     )

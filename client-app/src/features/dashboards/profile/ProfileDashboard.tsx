@@ -16,7 +16,7 @@ export default observer(function ProfileDashboard() {
     useEffect(() => {
         loadProfile(username)
         loadOwnedBooks(userStore.user!.id)
-    }, [loadProfile, username, loadOwnedBooks])
+    }, [loadProfile, username, loadOwnedBooks, userStore.user])
 
     if (loadingProfile || loading) return <LoadingComponent content="Loading profile" />
 
