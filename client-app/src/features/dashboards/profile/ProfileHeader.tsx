@@ -3,7 +3,7 @@ import { Grid, Header, Icon, Item, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/Store";
 
 export default observer(function ProfileHeader() {
-    const {  bookStore, swapStore, profileStore } = useStore()
+    const { bookStore, swapStore, profileStore } = useStore()
     const { booksOwnedMap } = bookStore
     const { swapHistory } = swapStore
     const { profile } = profileStore
@@ -21,11 +21,14 @@ export default observer(function ProfileHeader() {
                                     size="small"
                                     src={profile?.image}
                                 />) : (
-                                        <Icon name="user" verticleAlign="middle" size="huge"/>
+                                    <Icon name="user" verticleAlign="middle" size="huge" />
                                 )}
 
-                                <Item.Content verticalAlign="middle">
+                                <Item.Content verticalAlign="middle" >
                                     <Header as="h2" content={profile?.userName} />
+                                    <Grid.Column width={1} />
+                                    <Header as="h4" content={profile?.county} />
+
                                 </Item.Content>
                             </Item>
                         </Item.Group>
