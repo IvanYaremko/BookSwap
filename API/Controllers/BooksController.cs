@@ -31,6 +31,12 @@ namespace API.Controllers
             return await Mediator.Send(new List.Query());
         }
 
+        [HttpGet("{id}/owned")]
+        public async Task<ActionResult<List<Book>>> GetOwnedBooks(Guid id)
+        {
+            return await Mediator.Send(new ListOwned.Query{Id = id});
+        }
+
         /// <summary>
         /// This API endpoint is used by clients to retrieve a book from the database specified by its ID.
         /// The method utilises the Mediator Pattern by using MediatR - handles the flow of control.

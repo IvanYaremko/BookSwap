@@ -4,7 +4,7 @@ import { useStore } from "../../../app/stores/Store";
 
 export default observer(function ProfileHeader() {
     const {  bookStore, swapStore, profileStore } = useStore()
-    const { ownedBooks } = bookStore
+    const { booksOwnedMap } = bookStore
     const { swapHistory } = swapStore
     const { profile } = profileStore
     return (
@@ -33,7 +33,7 @@ export default observer(function ProfileHeader() {
                     <Grid.Column width={4}>
                         <Item style={{ marginTop: '45px', marginLeft: "50px" }}>
                             <Item.Content verticalAlign="middle">
-                                <Header as="h3">{ownedBooks.length} books owned </Header>
+                                <Header as="h3">{Array.from(booksOwnedMap.values()).length} books owned </Header>
                             </Item.Content>
                             <Item style={{ marginTop: '10px' }}>
                                 <Item.Content verticalAlign="middle">

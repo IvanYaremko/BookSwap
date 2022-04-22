@@ -54,6 +54,7 @@ const requests = {
 
 const Books = {
     list: () => requests.get<Book[]>('/books'),
+    listOwned: (id: string) => requests.get<Book[]>(`/books/${id}/owned`),
     details: (id: string) => requests.get<Book>(`/books/${id}`),
     create: (book: Book) => requests.post<void>('/books', book),
     update: (book: Book) => requests.put<void>(`/books/${book.id}`, book),

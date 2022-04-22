@@ -9,14 +9,16 @@ import ProfileHeader from "./ProfileHeader";
 
 export default observer(function ProfileDashboard() {
     const { username } = useParams<{ username: string }>()
-    const { profileStore } = useStore();
+    const { profileStore, bookStore, userStore } = useStore();
+    const { loadOwnedBooks, loading } = bookStore
     const { loadingProfile, loadProfile } = profileStore
 
     useEffect(() => {
         loadProfile(username)
-    }, [loadProfile, username])
+        loadOwnedBooks(userStore.user!.id)
+    }, [loadProfile, username, loadOwnedBooks])
 
-    if (loadingProfile) return <LoadingComponent content="Loading profile" />
+    if (loadingProfile || loading) return <LoadingComponent content="Loading profile" />
 
     return (
         <>

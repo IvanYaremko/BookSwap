@@ -9,6 +9,7 @@ import { store } from "./Store";
 export default class BookStore {
     bookMap = new Map<string, Book>()
     booksRequested = new Map<String, Book>()
+    booksOwnedMap = new Map<String, Book>()
     selectedBook: Book | undefined = undefined
     submittingBook!: Book
     editMode = false
@@ -18,13 +19,6 @@ export default class BookStore {
 
     constructor() {
         makeAutoObservable(this)
-    }
-
-    get ownedBooks() {
-        this.setLoadingInitial(true)
-        let books = Array.from(this.bookMap.values()).filter(book => book.appUserId === store.userStore.user!.id)
-        this.setLoadingInitial(false)
-        return books
     }
 
     loadBooks = async () => {
@@ -62,6 +56,24 @@ export default class BookStore {
                 console.log(error)
                 this.setLoadingInitial(false)
             }
+        }
+    }
+
+    loadOwnedBooks = async (id: string) => {
+        this.loading = true
+
+        try {
+            const ownedBooks = await agent.Books.listOwned(id)
+            ownedBooks.forEach(book => {
+                this.booksOwnedMap.set(book.id!, book)
+            })
+            runInAction(() => {
+                this.loading = false
+            })
+           
+        } catch (error) {
+            console.log(error)
+            runInAction(() => this.loading = false)
         }
     }
 
