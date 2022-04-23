@@ -7,11 +7,11 @@ import { useStore } from "../../app/stores/Store";
 export default observer(function HomePage() {
     const { userStore } = useStore()
     return (
+
         <Container style={{ marginTop: '7em' }}>
-            <h1>Home page</h1>
+            <Header as='h2'>Welcome to bookswap</Header>
             {userStore.checkLogin ? (
                 <>
-                    <Header as='h2'>Welcome to bookswap</Header>
                     <Button as={Link} to='/books' size='medium'>Go to BookSwap</Button>
                 </>
             ) : (
@@ -28,11 +28,8 @@ export default observer(function HomePage() {
                         as={Link} to='/register'>
                         Register
                     </Button>
-
                 </>
-
             )}
-
         </Container>
     )
 })

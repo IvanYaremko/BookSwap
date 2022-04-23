@@ -49,7 +49,6 @@ namespace Application.Messages
 
                     await _context.SaveChangesAsync();
 
-
                     var messageDto = new MessageDto
                     {
                         Id = message.Id,

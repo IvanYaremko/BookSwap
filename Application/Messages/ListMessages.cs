@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -23,17 +24,17 @@ namespace Application.Messages
 
             public async Task<List<MessageDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var messages = await _context.Messages.Where(message => message.Swap.Id == request.Id)
+                var messages = await _context.Messages
                     .OrderByDescending(message => message.SentAt)
                     .ToListAsync();
 
-                List<MessageDto> messageList = new List<MessageDto>();
-
+                Debug.WriteLine(messages);
+                List<MessageDto> returnListDto = new List<MessageDto>();
                 foreach (Message m in messages)
                 {
-                    if (m != null)
+                    if (m.Swap.Id == request.Id)
                     {
-                        messageList.Add(new MessageDto
+                        returnListDto.Add(new MessageDto
                         {
                             Id = m.Id,
                             UserName = m.SendBy.UserName,
@@ -45,8 +46,7 @@ namespace Application.Messages
                     }
 
                 }
-
-                return messageList;
+                return returnListDto;
             }
         }
     }

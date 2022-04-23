@@ -21,7 +21,7 @@ export default class MessageStore {
                 .configureLogging(LogLevel.Information)
                 .build()
             
-            this.hubConnection.start().catch(error => console.log("error starting hub ", error))
+            this.hubConnection.start().then(() => console.log("connection started")).catch(error => console.log("error starting hub ", error))
 
             this.hubConnection.on("LoadMessages", (messages: Message[]) => {
                 runInAction(() => {

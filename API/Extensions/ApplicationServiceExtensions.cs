@@ -27,14 +27,17 @@ namespace API.Extensions
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:3000");
+                    policy.WithOrigins("http://localhost:3000").AllowCredentials().WithMethods("GET", "POST", "PUT", "DELETE").AllowAnyMethod().AllowAnyHeader();
                 });
             });
             // This service tell MediatR where to find handlesr
             services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddScoped<IPhoto, PhotoAccessor>();
             services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
-            services.AddSignalR();
+            services.AddSignalR(o =>
+            {
+                o.EnableDetailedErrors = true;
+            });
 
             return services;
         }
