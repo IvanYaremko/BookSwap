@@ -14,7 +14,7 @@ export default class MessageStore {
     createHubConnection = (swapId: string) => {
         if (store.swapStore.selectedSwap) {
             this.hubConnection = new HubConnectionBuilder()
-                .withUrl('http://localhost:5000/message?swapId=' + swapId, {
+                .withUrl(process.env.REACT_APP_API_MESSAGES_URL + '?swapId=' + swapId, {
                     accessTokenFactory: () => store.userStore.user?.token!
                 })
                 .withAutomaticReconnect()
