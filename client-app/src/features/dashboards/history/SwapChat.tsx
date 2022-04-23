@@ -1,6 +1,6 @@
 import { Field, FieldProps, Formik } from "formik";
 import { observer } from "mobx-react-lite";
-import { Comment, Form, Header, Icon, Input, Loader, Segment } from "semantic-ui-react";
+import { Comment, Form, Header, Icon, Loader, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/Store";
 // https://date-fns.org/ docs
 import { formatDistanceToNow } from 'date-fns'
