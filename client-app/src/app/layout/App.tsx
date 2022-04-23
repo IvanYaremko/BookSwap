@@ -19,6 +19,7 @@ import RequestorBookList from '../../features/dashboards/swap/RequestorBookList'
 import SwapHistoryDashboard from '../../features/dashboards/history/SwapHistoryDashboard';
 import ProfileDashboard from '../../features/dashboards/profile/ProfileDashboard';
 import SwapHistoryDetails from '../../features/dashboards/history/SwapHistoryDetails';
+import PrivateRoute from './PrivateRoute';
 
 function App() {
   const location = useLocation()
@@ -50,15 +51,15 @@ function App() {
             <NavBar />
             <Container style={{ marginTop: '10em' }}>
               <Switch>
-                <Route exact path='/books' component={MarketDashboard} />
-                <Route path='/books/:id' component={BookDetails} />
-                <Route key={location.key} path={['/edit/:id', '/edit',]} component={BookForm} />
-                <Route path={'/createBook'} component={IsbnForm} />
-                <Route path={'/profile/:username'} component={ProfileDashboard} />
-                <Route path={'/requestor/:id'} component={RequestorBookList} />
-                <Route path={'/swaps'} component={SwapDashboard} />
-                <Route exact path={'/history'} component={SwapHistoryDashboard} />
-                <Route path='/history/:swapId' component={SwapHistoryDetails} />
+                <PrivateRoute exact path='/books' component={MarketDashboard} />
+                <PrivateRoute path='/books/:id' component={BookDetails} />
+                <PrivateRoute key={location.key} path={['/edit/:id', '/edit',]} component={BookForm} />
+                <PrivateRoute path={'/createBook'} component={IsbnForm} />
+                <PrivateRoute path={'/profile/:username'} component={ProfileDashboard} />
+                <PrivateRoute path={'/requestor/:id'} component={RequestorBookList} />
+                <PrivateRoute path={'/swaps'} component={SwapDashboard} />
+                <PrivateRoute exact path={'/history'} component={SwapHistoryDashboard} />
+                <PrivateRoute path='/history/:swapId' component={SwapHistoryDetails} />
                 <Route component={NotFound} />
               </Switch>
             </Container>
