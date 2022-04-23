@@ -37,6 +37,20 @@ public static class IdentityServicesExtensions
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
+                // the client app will base the token using a query string "access_token" to the SignalR hub
+                opt.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if(!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/message")))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
         services.AddScoped<TokenService>();
