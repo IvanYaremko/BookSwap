@@ -32,7 +32,7 @@ namespace Application.Swaps
                     var requestorUser = users.FirstOrDefault(appUser => appUser.Id == request.Id.ToString());
                     foreach (BookSwap s in mySwaps)
                     {
-                        if (s.status == "requeset")
+                        if (s.status == "request")
                         {
                             var ownerUser = users.FirstOrDefault(AppUser => AppUser.Id == s.ownerID);
                             var bookIWant = ownerUser.Books.FirstOrDefault(book => book.Id.ToString().ToLower() == s.ownerBookID.ToLower());

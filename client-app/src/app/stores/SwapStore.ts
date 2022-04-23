@@ -159,6 +159,8 @@ export default class SwapStore {
             await agent.Swaps.delete(id)
             runInAction(() => {
                 this.swapMap.delete(id)
+                this.myRequestsMap.delete(id)
+                this.requestedMap.delete(id)
                 this.loading = false
             })
         } catch (error) {

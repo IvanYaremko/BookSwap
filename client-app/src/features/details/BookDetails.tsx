@@ -30,6 +30,7 @@ export default observer(function BookDetails() {
             requesterBookID: "",
             status: "request"
         }
+        console.log(swap)
         createSwap(swap).then(() => history.push("/books"))
     }
 

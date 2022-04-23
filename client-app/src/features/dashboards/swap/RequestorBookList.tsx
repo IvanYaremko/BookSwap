@@ -34,7 +34,7 @@ export default observer(function RequestorBookList() {
     }
 
     function handleDelete() {
-        deleteSwap(id).then(() => history.push('/books'))
+        deleteSwap(id).then(() => history.push('/swaps'))
     }
 
 
