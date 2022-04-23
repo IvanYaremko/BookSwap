@@ -7,6 +7,7 @@ import { formatDistanceToNow } from 'date-fns'
 import * as Yup from 'yup';
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import { Message } from "../../../app/models/Message";
 
 interface Props {
     swapId: string;
@@ -68,21 +69,21 @@ export default observer(function SwapChat({ swapId }: Props) {
                 </Formik>
                                         
                 <Comment.Group>
-                    {messageStore.messages.map(comment => (
-                        <Comment key={comment.id}>
-                            {comment.image ? (
-                                <Comment.Avatar src={comment.image} />) : (
+                    {messageStore.messages.map( (message: Message) => (
+                        <Comment key={message.id}>
+                            {message.image ? (
+                                <Comment.Avatar src={message.image} />) : (
                                     <Icon name="user"/>
                                 )}
                             
                             <Comment.Content>
-                                <Comment.Author as={Link} to={`/profiles/${comment.userName}`}>
-                                    {comment.displayName}
+                                <Comment.Author as={Link} to={`/profiles/${message.userName}`}>
+                                    {message.displayName}
                                 </Comment.Author>
                                 <Comment.Metadata>
-                                    <div>{formatDistanceToNow(comment.createdAt)} ago</div>
+                                    <div>{formatDistanceToNow(message.createdAt)} ago</div>
                                 </Comment.Metadata>
-                                <Comment.Text style={{ whiteSpace: 'pre-wrap' }}>{comment.text}</Comment.Text>
+                                <Comment.Text style={{ whiteSpace: 'pre-wrap' }}>{message.text}</Comment.Text>
                             </Comment.Content>
                         </Comment>
                     ))}
