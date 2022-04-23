@@ -36,6 +36,9 @@ if (app.Environment.IsDevelopment())
 
 // app.UseHttpsRedirection();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
@@ -43,6 +46,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<MessageHub>("/message");
+app.MapFallbackToController("Index", "Fallback");
 
 
 /// <summary>
