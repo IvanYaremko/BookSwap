@@ -18,6 +18,7 @@ import SwapDashboard from '../../features/dashboards/swap/SwapDashboard';
 import RequestorBookList from '../../features/dashboards/swap/RequestorBookList';
 import SwapHistoryDashboard from '../../features/dashboards/history/SwapHistoryDashboard';
 import ProfileDashboard from '../../features/dashboards/profile/ProfileDashboard';
+import SwapHistoryDetails from '../../features/dashboards/history/SwapHistoryDetails';
 
 function App() {
   const location = useLocation()
@@ -43,7 +44,7 @@ function App() {
         path={['/books', '/books/:id', '/edit/:id', '/edit',
           '/createBook', '/server-error', '/not-found',
           '/swaps', '/requestor/:id', '/history',
-          '/profile/:username']}
+          '/profile/:username', '/history/:swapId']}
         render={() => (
           <>
             <NavBar />
@@ -56,7 +57,8 @@ function App() {
                 <Route path={'/profile/:username'} component={ProfileDashboard} />
                 <Route path={'/requestor/:id'} component={RequestorBookList} />
                 <Route path={'/swaps'} component={SwapDashboard} />
-                <Route path={'/history'} component={SwapHistoryDashboard} />
+                <Route exact path={'/history'} component={SwapHistoryDashboard} />
+                <Route path='/history/:swapId' component={SwapHistoryDetails} />
                 <Route component={NotFound} />
               </Switch>
             </Container>

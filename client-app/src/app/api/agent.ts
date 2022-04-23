@@ -1,10 +1,21 @@
-import axios, {  AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { Book } from "../models/Book";
 import { BookSwap } from "../models/BookSwap";
 import { Photo, Profile } from "../models/Profile";
 import { SwapRequests } from "../models/SwapRequests";
 import { User, UserBook, UserForm } from "../models/User";
 import { store } from "../stores/Store";
+
+const sleep = (delay: number) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, delay)
+    })
+}
+
+axios.interceptors.response.use(async response => {
+    await sleep(1000);
+    return response;
+})
 
 axios.defaults.baseURL = 'http://localhost:5000/api'
 

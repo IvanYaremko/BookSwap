@@ -169,6 +169,10 @@ export default class SwapStore {
         }
     }
 
+    clearSelectedSwap = () => {
+        this.selectedSwap = undefined
+    }
+
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state
     }

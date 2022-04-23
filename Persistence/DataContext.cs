@@ -9,15 +9,16 @@ public class DataContext : IdentityDbContext<AppUser>
     {
     }
 
-    // protected override void OnModelCreating(ModelBuilder builder)
-    // {
-    //     base.OnModelCreating(builder);
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
 
-    //     builder.Entity<AppUser>()
-    //         .HasMany(b => b.Books)
-    //         .WithOne(a => a.AppUser)
-    //         .IsRequired();
-    // }
+        // Enables the cascase deletation of a swap -> messages
+        builder.Entity<Message>()
+            .HasOne(m => m.Swap)
+            .WithMany(s => s.Messages)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
 
     public DbSet<Book> Books { get; set; }
 
@@ -26,5 +27,7 @@ public class DataContext : IdentityDbContext<AppUser>
     public DbSet<BookSwap> Swaps { get; set; }
 
     public DbSet<Photo> Photos { get; set; }
+
+    public DbSet<Message> Messages { get; set; }
 
 }

@@ -1,9 +1,10 @@
 import { observer } from "mobx-react-lite";
-import { Grid, Icon, Image, Item, Segment } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import {  Grid, Icon, Image, Item, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/Store";
 
 export default observer(function PastSwapsList() {
-    const { swapStore } = useStore()
+    const { swapStore, userStore } = useStore()
     const { historyMap } = swapStore
 
     return (
@@ -16,34 +17,38 @@ export default observer(function PastSwapsList() {
 
                             <Grid.Column>
                                 <Grid.Row>
-                                <Item.Content ><b>You swapped</b></Item.Content>
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Item.Image src={swap.ownerBook!.image} size="tiny" />
                                 </Grid.Row>
                             </Grid.Column>
                             <Grid.Column>
-                                <Icon name="arrows alternate horizontal" style={{marginLeft: "25px", marginTop: "50px"}} size="huge"/>
+                                <Link to={`/history/${swap.swapId}`}>
+                                    <Icon name="arrows alternate horizontal" style={{ marginLeft: "25px", marginTop: "40px" }} size="huge" />
+
+                                </Link>
                             </Grid.Column>
-                            <Grid.Column style={{marginLeft: "25px"}}>
+                            <Grid.Column style={{ marginLeft: "25px" }}>
                                 <Grid.Row>
-                                <Item.Content ><b>With this book</b></Item.Content>
                                 </Grid.Row>
                                 <Grid.Row>
-                                    <Item.Image src={swap.requestorBook!.image } size="tiny"/>
+                                    <Item.Image src={swap.requestorBook!.image} size="tiny" />
                                 </Grid.Row>
                             </Grid.Column>
-                            <Grid.Column style={{marginLeft: "25px", marginTop: "35px"}}>
+                            <Grid.Column style={{ marginLeft: "25px" }}>
                                 <Grid.Row>
-                                    <Item.Content><b>Contact details</b></Item.Content>
+                                    <Item.Content><b>Member</b></Item.Content>
                                 </Grid.Row>
                                 <Grid.Row >
-                                    <Item.Content>{swap.requestor.email}</Item.Content>
-                                    {swap.requestor.photos.length === 0 ? (
-                                        <Icon name="user" size="big" />
-                                    ) : (
+                                    <Item.Content>
+                                        {swap.owner.userName === userStore.user?.userName ? (swap.requestor.userName) : (swap.owner.userName)}
+                                    </Item.Content>
+                                    {swap.owner.userName === userStore.user?.userName ? (
                                         <Image src={swap.requestor.photos.find(image => image.isMain)?.url} size="tiny" />
-                                    )}                                    <Item.Content>{swap.requestor.county}</Item.Content>
+                                    ) : (
+                                        <Image src={swap.owner.photos.find(image => image.isMain)?.url} size="tiny" />
+                                    )}
+                                    <Item.Content>{swap.requestor.county}</Item.Content>
                                 </Grid.Row>
                             </Grid.Column>
 
