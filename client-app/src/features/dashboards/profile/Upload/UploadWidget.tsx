@@ -7,7 +7,9 @@ interface Props {
     loading: boolean
     uploadPhoto: (file: any) => void
 }
-
+/**
+ * 
+ */
 export default observer(function UploadWidget({loading, uploadPhoto}: Props) {
     const [files, setFiles] = useState<any>([])
 

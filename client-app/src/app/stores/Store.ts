@@ -6,6 +6,9 @@ import ProfileStore from "./ProfileStore";
 import SwapStore from "./SwapStore";
 import UserStore from "./UserStore";
 
+/**
+ * 
+ */
 interface Store {
     bookStore: BookStore
     commonStore: CommonStore

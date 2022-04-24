@@ -6,6 +6,9 @@ using Domain;
 
 namespace API.DTOs
 {
+    /// <summary>
+    /// This is a Data Transfer Objec used to retreive the user information along with their books.
+    /// </summary>
     public class UserBook
     {
         public string UserId { get; set; }

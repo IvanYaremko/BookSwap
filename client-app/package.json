@@ -8,13 +8,14 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "@types/jest": "^26.0.24",
-    "@types/node": "^12.20.37",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
     "@types/react-router-dom": "^5.3.2",
     "axios": "^0.24.0",
+    "better-docs": "^2.7.2",
     "date-fns": "^2.28.0",
     "formik": "^2.2.9",
+    "jsdoc": "^3.6.10",
     "mobx": "^6.3.10",
     "mobx-react-lite": "^3.2.2",
     "react": "^17.0.2",
@@ -35,7 +36,8 @@
     "build": "react-scripts build",
     "postbuild": "move build ../API/wwwroot",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "docs": "jsdoc -c jsdoc.conf.json"
   },
   "eslintConfig": {
     "extends": [
@@ -56,7 +58,10 @@
     ]
   },
   "devDependencies": {
+    "@types/node": "^17.0.25",
     "@types/uuid": "^8.3.3",
-    "@types/yup": "^0.29.13"
+    "@types/yup": "^0.29.13",
+    "react-docgen-typescript": "^2.2.2",
+    "typedoc": "https://github.com/DatenMetzgerX/typedoc/tarball/typescript-2-build"
   }
 }

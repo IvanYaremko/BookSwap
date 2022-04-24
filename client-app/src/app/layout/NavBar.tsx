@@ -4,7 +4,9 @@ import {  NavLink } from "react-router-dom";
 import {  Container, Dropdown, Icon, Image, Menu } from "semantic-ui-react";
 import { useStore } from "../stores/Store";
 
-
+/**
+ * NavBar 
+ */
 export default observer(function NavBar() {
     const { userStore: { user, logout } } = useStore()
 

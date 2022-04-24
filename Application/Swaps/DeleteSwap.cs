@@ -7,6 +7,14 @@ using Persistence;
 
 namespace Application.Swaps
 {
+    /// <summary>
+    /// This class implements the CQRS principles.
+    /// The MediatR library handles the flow of control.
+    /// The Swap API Contoller initialises a new DeleteSwap.Command class,
+    /// passing along the BookSwap id  to be added to the Database.
+    /// The Handler class handles the necessary logic to delete the BookSwap object from the database.
+    /// </summary>
+
     public class DeleteSwap
     {
         public class Command : IRequest<Unit>

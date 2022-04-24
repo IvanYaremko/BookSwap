@@ -8,7 +8,11 @@ interface Props {
     rows: number;
     label?: string;
 }
-
+/**
+ * Custom textarea to check if input field has been touched or has error
+ * @param props 
+ * @returns 
+ */
 export default function CustomTextArea(props: Props) {
     const [field, meta] = useField(props.name); 
     return (

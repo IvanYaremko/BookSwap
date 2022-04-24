@@ -2,6 +2,9 @@ using Domain;
 
 namespace Application.Swaps
 {
+    /// <summary>
+    /// This class is used a data transfer object
+    /// </summary>
     public class SwapRequestsDto
     {
         public Guid SwapId { get; set; }

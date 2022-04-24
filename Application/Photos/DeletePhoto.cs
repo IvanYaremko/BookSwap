@@ -6,8 +6,14 @@ using Persistence;
 
 namespace Application.Photos
 {
+    /// <summary>
+    /// This class is used to delete a photo from cloudinary and in the AppUsers Photos collection.
+    /// </summary>
     public class DeletePhoto
     {
+        /// <summary>
+        /// The comand class contains the id property of the photo to be deleted.
+        /// </summary>
         public class Command : IRequest<Unit>
         {
             public string Id { get; set; }
@@ -18,6 +24,13 @@ namespace Application.Photos
             private readonly DataContext _context;
             private readonly IPhoto _accessor;
             private readonly IHttpContextAccessor _httpContextAccessor;
+
+            /// <summary>
+            ///  The constructor to inject the required services into the class.
+            /// </summary>
+            /// <param name="context">The database context</param>
+            /// <param name="accessor">The cloudinary context<</param>
+            /// <param name="httpContextAccessor">The httpContext context</param>
             public Handler(DataContext context, IPhoto accessor, IHttpContextAccessor httpContextAccessor)
             {
                 _httpContextAccessor = httpContextAccessor;
@@ -26,6 +39,17 @@ namespace Application.Photos
 
             }
 
+            /// <summary>
+            /// This method contains the logic to delete the specified photo from cloudinary and database storage.
+            /// The method retrieves the user making the request, this AppUser object is necessary to access their Photos Collection.
+            /// The desired photo to delete is retrieved from the AppUsers photos collection,
+            /// a condition is in place to check if it is a main photo.
+            /// The photo is then deleted from cloudinary, and removed from the users collection.
+            /// The data context changes are saved.
+            /// </summary>
+            /// <param name="request"></param>
+            /// <param name="cancellationToken"></param>
+            /// <returns></returns>
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                  var user = await _context.Users.Include(user => user.Photos)

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: app/stores/SwapStore.ts</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: app/stores/SwapStore.ts</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { makeAutoObservable, runInAction } from "mobx";
+import agent from "../api/agent";
+import { BookSwap } from "../models/BookSwap";
+import { SwapRequests } from "../models/SwapRequests";
+import { UserBook } from "../models/User";
+
+
+/**
+ * 
+ */
+export default class SwapStore {
+    // Map of all the swaps
+    swapMap = new Map&lt;string, BookSwap>()
+    selectedSwap: BookSwap | undefined = undefined
+
+    // Map of all the swaps being requested of the current user
+    requestedMap = new Map&lt;string, SwapRequests>()
+    requestDetails: SwapRequests | undefined = undefined
+    // Map of all the swaps the current user is requesting
+    myRequestsMap = new Map&lt;string, SwapRequests>()
+    // history of users Swaps
+    historyMap = new Map&lt;string, SwapRequests>()
+
+    selectedRequestor: UserBook | undefined = undefined
+    sumbittedSwap!: BookSwap
+    editSwap = false
+    loading = false
+    loadingInitial = false
+
+    constructor() {
+        makeAutoObservable(this)
+    }
+
+    loadRequested = async (id: string) => {
+        this.loading = true
+
+        try {
+            const requestedFromMe = await agent.Swaps.listRequested(id)
+            requestedFromMe.forEach(r => {
+                this.requestedMap.set(r.swapId, r)
+            })
+            runInAction(() => this.loading = false)
+        } catch (error) {
+            console.log(error)
+            runInAction(() => this.loading = false)
+        }
+    }
+
+    loadMyRequests = async (id: string) => {
+        this.loadingInitial = true
+
+        try {
+            const myRequests = await agent.Swaps.listMyRequests(id)
+            myRequests.forEach(r => {
+                this.myRequestsMap.set(r.swapId, r)
+            })
+            runInAction(() => this.loading = false)
+
+        } catch (error) {
+            console.log(error)
+            runInAction(() => this.loading = false)
+        }
+    }
+
+    loadHistory = async (id: string) => {
+        this.loading = true
+
+        try {
+            const history = await agent.Swaps.listHistory(id)
+            history.forEach(h => {
+                this.historyMap.set(h.swapId, h)
+            })
+            runInAction(() => this.loading = false)
+
+        } catch (error) {
+            console.log(error)
+            runInAction(() => this.loading = false)
+        }
+    }
+
+    loadSwaps = async () => {
+        this.setLoadingInitial(true)
+        try {
+            const swaps = await agent.Swaps.list()
+            swaps.forEach(swap => {
+                this.setSwap(swap)
+            })
+            runInAction(() => this.setLoadingInitial(false))
+        } catch (error) {
+            console.log(error)
+            runInAction(() => this.setLoadingInitial(false))
+        }
+    }
+
+    loadRequest = (id: string) => {
+        return this.requestedMap.get(id)
+    }
+
+    loadSwap = async (id: string) => {
+        let swap = this.getSwap(id)
+
+        if (swap) {
+            this.selectedSwap = swap
+            return swap
+        } else {
+            this.setLoadingInitial(true)
+            try {
+                swap = await agent.Swaps.details(id)
+                this.setSwap(swap)
+                runInAction(() => {
+                    this.selectedSwap = swap
+                })
+                this.setLoadingInitial(false)
+                return swap
+            } catch (error) {
+                console.log(error)
+                this.setLoadingInitial(false)
+            }
+        }
+    }
+
+    createSwap = async (swap: BookSwap) => {
+        this.loading = true
+        try {
+            await agent.Swaps.create(swap)
+            runInAction(() => {
+                this.swapMap.set(swap.id, swap)
+                this.selectedSwap = swap
+                this.editSwap = false
+                this.loading = false
+            })
+        } catch (error) {
+            console.log(error)
+            runInAction(() => {
+                this.loading = false
+            })
+        }
+    }
+
+    updateSwap = async (swap: BookSwap) => {
+        this.loading = true
+        try {
+            await agent.Swaps.update(swap.id, swap)
+            runInAction(() => {
+                this.swapMap.set(swap.id, swap)
+                this.selectedSwap = swap
+                this.editSwap = false
+                this.loading = false
+            })
+        } catch (error) {
+            console.log(error)
+            runInAction(() => {
+                this.loading = false
+            })
+        }
+    }
+
+    deleteSwap = async (id: string) => {
+        this.loading = true
+        try {
+            await agent.Swaps.delete(id)
+            runInAction(() => {
+                this.swapMap.delete(id)
+                this.myRequestsMap.delete(id)
+                this.requestedMap.delete(id)
+                this.loading = false
+            })
+        } catch (error) {
+            console.log(error)
+            runInAction(() => {
+                this.loading = false
+            })
+        }
+    }
+
+    clearSelectedSwap = () => {
+        this.selectedSwap = undefined
+    }
+
+    setLoadingInitial = (state: boolean) => {
+        this.loadingInitial = state
+    }
+
+    private setSwap = (swap: BookSwap) => {
+        this.swapMap.set(swap.id!, swap)
+    }
+
+    setRequestDetails(request: SwapRequests) {
+        this.requestDetails! = request
+    }
+
+    getSwap = (id: string) => {
+        return this.swapMap.get(id)
+    }
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.html#.exports">exports</a></li></ul><h3>Interfaces</h3><ul><li><a href="AppUser.html">AppUser</a></li><li><a href="Book.html">Book</a></li><li><a href="BookSwap.html">BookSwap</a></li><li><a href="IsbnBook.html">IsbnBook</a></li><li><a href="Message.html">Message</a></li><li><a href="Profile.html">Profile</a></li><li><a href="ServerError.html">ServerError</a></li><li><a href="Store.html">Store</a></li><li><a href="SwapHistory.html">SwapHistory</a></li><li><a href="User.html">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#County">County</a></li><li><a href="global.html#history">history</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sun Apr 24 2022 15:50:55 GMT+0100 (Irish Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

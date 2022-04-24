@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: app/stores/ProfileStore.ts</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: app/stores/ProfileStore.ts</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { makeAutoObservable, runInAction } from "mobx";
+import agent from "../api/agent";
+import { Photo, Profile } from "../models/Profile";
+import { store } from "./Store";
+
+/**
+ * 
+ */
+export default class ProfileStore {
+    profile: Profile | null = null
+    loadingProfile = false
+    isUploading = false
+    isMainLoading = false
+    loading = false
+
+    constructor() {
+        makeAutoObservable(this);
+    }
+
+    get isCurrentUser() {
+        if (store.userStore.user &amp;&amp; this.profile) {
+            return store.userStore.user.userName === this.profile.userName
+        }
+        return false
+    }
+
+    loadProfile = async (username: string) => {
+        this.loadingProfile = true
+        try {
+            const profile = await agent.Profiles.get(username)
+            runInAction(() => {
+                this.profile = profile
+                this.loadingProfile = false
+            })
+        } catch (error) {
+            console.log(error)
+            runInAction(() => this.loadingProfile = false)
+        }
+    }
+
+    uploadPhoto = async (file: any) => {
+        this.isUploading = true
+        try {
+            const response = await agent.Profiles.uploadPhoto(file)
+            const photo = response.data
+            runInAction(() => {
+                if (this.profile) {
+                    this.profile.photos?.push(photo)
+                    if (photo.isMain &amp;&amp; store.userStore.user) {
+                        store.userStore.setImage(photo.url)
+                        this.profile.image = photo.url
+                    }
+                }
+                this.isUploading = false
+            })
+        } catch (error) {
+            console.log(error)
+            runInAction(() => this.isUploading = false)
+        }
+    }
+
+    setMain = async (photo: Photo) => {
+        this.isMainLoading = true
+        try {
+            await agent.Profiles.setMainPhoto(photo.id)
+            store.userStore.setImage(photo.url)
+            runInAction(() => {
+                if (this.profile &amp;&amp; this.profile.photos) {
+                    this.profile.photos.find(p => p.isMain)!.isMain = false
+                    this.profile.photos.find(p => p.id === photo.id)!.isMain = true
+                    this.profile.image = photo.url
+                    this.isMainLoading = false
+                }
+            })
+        } catch (error) {
+            console.log(error)
+            runInAction(() => this.isMainLoading = false)
+        }
+    }
+
+    deletePhoto = async (photo: Photo) => {
+        this.isMainLoading = true
+        try {
+            await agent.Profiles.deletePhoto(photo.id)
+            runInAction(() => {
+                if (this.profile) {
+                    this.profile.photos = this.profile.photos?.filter(p => p.id !== photo.id)
+                    this.isMainLoading = false
+                }
+            })
+        } catch (error) {
+            console.log(error)
+            runInAction(() => this.isMainLoading = false)
+        }
+    }
+
+    updateProfile = async (profile: Profile) => {
+        this.loading = true;
+        try {
+            await agent.Profiles.updateProfile(profile);
+            runInAction(() => {
+                if (profile.displayName &amp;&amp; profile.displayName !== store.userStore.user?.displayName) {
+                    store.userStore.setDisplayName(profile);
+                }
+                this.profile = {...this.profile, ...profile as Profile};
+                this.loading = false;
+            })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => this.loading = false);
+        }
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.html#.exports">exports</a></li></ul><h3>Interfaces</h3><ul><li><a href="AppUser.html">AppUser</a></li><li><a href="Book.html">Book</a></li><li><a href="BookSwap.html">BookSwap</a></li><li><a href="IsbnBook.html">IsbnBook</a></li><li><a href="Message.html">Message</a></li><li><a href="Profile.html">Profile</a></li><li><a href="ServerError.html">ServerError</a></li><li><a href="Store.html">Store</a></li><li><a href="SwapHistory.html">SwapHistory</a></li><li><a href="User.html">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#County">County</a></li><li><a href="global.html#history">history</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sun Apr 24 2022 15:50:55 GMT+0100 (Irish Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

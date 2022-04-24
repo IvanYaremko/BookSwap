@@ -7,8 +7,9 @@ import { BookSwap } from "../../app/models/BookSwap";
 import { useStore } from "../../app/stores/Store";
 import { v4 as uuid } from 'uuid'
 
-
-
+/**
+ * 
+ */
 export default observer(function BookDetails() {
     const history = useHistory()
     const { bookStore, userStore, swapStore } = useStore()

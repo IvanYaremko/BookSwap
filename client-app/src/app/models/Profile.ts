@@ -1,5 +1,7 @@
 import { User } from "./User"
-
+/**
+ * Profile interface
+ */
 export interface Profile {
     userName: string
     displayName: string

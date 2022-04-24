@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    /// <summary>
+    /// This controller is used to manage the build react application on the kestrel server
+    /// </summary>
     [AllowAnonymous]
     public class FallbackController : Controller
     {

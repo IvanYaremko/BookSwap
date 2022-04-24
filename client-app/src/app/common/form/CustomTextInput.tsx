@@ -8,7 +8,11 @@ interface Props {
     label?: string;
     type?: string;
 }
-
+/**
+ * Custom text input to check if input field has been touched or has error
+ * @param props 
+ * @returns 
+ */
 export default function CustomTextInput(props: Props) {
     const [field, meta] = useField(props.name); 
     return (

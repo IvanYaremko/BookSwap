@@ -12,7 +12,9 @@ import { Message } from "../../../app/models/Message";
 interface Props {
     swapId: string;
 }
-
+/**
+ * 
+ */
 export default observer(function SwapChat({ swapId }: Props) {
     const { messageStore } = useStore()
 

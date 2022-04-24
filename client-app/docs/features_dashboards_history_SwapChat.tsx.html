@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: features/dashboards/history/SwapChat.tsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: features/dashboards/history/SwapChat.tsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Field, FieldProps, Formik } from "formik";
+import { observer } from "mobx-react-lite";
+import { Comment, Form, Header, Icon, Loader, Segment } from "semantic-ui-react";
+import { useStore } from "../../../app/stores/Store";
+// https://date-fns.org/ docs
+import { formatDistanceToNow } from 'date-fns'
+import * as Yup from 'yup';
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Message } from "../../../app/models/Message";
+
+interface Props {
+    swapId: string;
+}
+/**
+ * 
+ */
+export default observer(function SwapChat({ swapId }: Props) {
+    const { messageStore } = useStore()
+
+    useEffect(() => {
+        if (swapId) {
+            messageStore.createHubConnection(swapId);
+        }
+        return () => {
+            messageStore.removeMessages();
+        }
+    }, [messageStore, swapId]);
+
+
+    return (
+        &lt;>
+            &lt;Segment textAlign="center" attached="top" color="teal" style={{ border: "none" }}>
+                &lt;Header>Message with member&lt;/Header>
+            &lt;/Segment>
+            &lt;Segment attached clearing>
+                &lt;Comment.Group>
+                    {messageStore.messages.map((message: Message) => (
+                        &lt;Comment key={message.id}>
+                            {message.image ? (
+                                &lt;Comment.Avatar src={message.image} />) : (
+                                &lt;Icon name="user" />
+                            )}
+
+                            &lt;Comment.Content>
+                                &lt;Comment.Author as={Link} to={`/profiles/${message.userName}`}>
+                                    {message.displayName}
+                                &lt;/Comment.Author>
+                                &lt;Comment.Metadata>
+                                    &lt;div>{formatDistanceToNow(message.createdAt)} ago&lt;/div>
+                                &lt;/Comment.Metadata>
+                                &lt;Comment.Text style={{ whiteSpace: 'pre-wrap' }}>{message.text}&lt;/Comment.Text>
+                            &lt;/Comment.Content>
+                        &lt;/Comment>
+                    ))}
+                &lt;/Comment.Group>
+
+                &lt;Formik
+                    onSubmit={(values, { resetForm }) =>
+                        messageStore.addMessage(values).then(() => resetForm())}
+                    initialValues={{ text: '' }}
+                    validationSchema={Yup.object({
+                        text: Yup.string().required()
+                    })}>
+
+                    {({ isSubmitting, isValid, handleSubmit }) => (
+                        &lt;Form className='ui form'>
+                            
+                            &lt;Field name='text'>
+                                {(props: FieldProps) => (
+                                    &lt;div style={{ position: 'relative' }}>
+                                        &lt;Loader active={isSubmitting} />
+                                        &lt;textarea
+                                            placeholder='Enter your comment (Enter to submit, SHIFT + enter for new line)'
+                                            rows={2}
+                                            {...props.field}
+                                            onKeyPress={e => {
+                                                if (e.key === 'Enter' &amp;&amp; e.shiftKey) {
+                                                    return;
+                                                }
+                                                if (e.key === 'Enter' &amp;&amp; !e.shiftKey) {
+                                                    e.preventDefault();
+                                                    isValid &amp;&amp; handleSubmit();
+                                                }
+                                            }}
+                                        />
+                                    &lt;/div>
+                                )}
+                            &lt;/Field>
+                        &lt;/Form>
+                    )}
+
+                &lt;/Formik>
+
+
+            &lt;/Segment>
+        &lt;/>
+    )
+})</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.html#.exports">exports</a></li></ul><h3>Interfaces</h3><ul><li><a href="AppUser.html">AppUser</a></li><li><a href="Book.html">Book</a></li><li><a href="BookSwap.html">BookSwap</a></li><li><a href="IsbnBook.html">IsbnBook</a></li><li><a href="Message.html">Message</a></li><li><a href="Profile.html">Profile</a></li><li><a href="ServerError.html">ServerError</a></li><li><a href="Store.html">Store</a></li><li><a href="SwapHistory.html">SwapHistory</a></li><li><a href="User.html">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#County">County</a></li><li><a href="global.html#history">history</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sun Apr 24 2022 15:50:55 GMT+0100 (Irish Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: app/stores/BookStore.ts</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: app/stores/BookStore.ts</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { makeAutoObservable, runInAction } from "mobx"
+import agent from "../api/agent"
+import isbnAgent from "../api/isbnAgent"
+import { Book } from "../models/Book"
+import { IsbnBook } from "../models/IsbnBook"
+import { store } from "./Store";
+
+/**
+ * 
+ */
+export default class BookStore {
+    bookMap = new Map&lt;string, Book>()
+    booksOwnedMap = new Map&lt;String, Book>()
+    selectedBook: Book | undefined = undefined
+    submittingBook!: Book
+    editMode = false
+    loading = false
+    loadingInitial = false
+    county: string | undefined = undefined
+
+    constructor() {
+        makeAutoObservable(this)
+    }
+
+    loadBooks = async () => {
+        this.setLoadingInitial(true)
+        try {
+            const books = await agent.Books.list()
+            books.forEach(book => {
+                this.setBook(book)
+            })
+          
+            this.setLoadingInitial(false)
+
+        } catch (error) {
+            console.log(error)
+            this.setLoadingInitial(false)
+        }
+    }
+
+    loadBook = async (id: string) => {
+        let book = this.getBook(id)
+
+        if (book) {
+            this.selectedBook = book
+            return book
+        } else {
+            this.setLoadingInitial(true)
+            try {
+                book = await agent.Books.details(id)
+                runInAction(() => {
+                    this.selectedBook = book
+                })
+                this.setLoadingInitial(false)
+                return book
+            } catch (error) {
+                console.log(error)
+                this.setLoadingInitial(false)
+            }
+        }
+    }
+
+    loadOwnedBooks = async (id: string) => {
+        this.loading = true
+
+        try {
+            const ownedBooks = await agent.Books.listOwned(id)
+            ownedBooks.forEach(book => {
+                this.booksOwnedMap.set(book.id!, book)
+            })
+            runInAction(() => {
+                this.loading = false
+            })
+           
+        } catch (error) {
+            console.log(error)
+            runInAction(() => this.loading = false)
+        }
+    }
+
+
+    private setBook = (book: Book) => {
+        this.bookMap.set(book.id!, book)
+    }
+
+    getBook = (id: string) => {
+        return this.bookMap.get(id)
+    }
+
+    setLoadingInitial = (state: boolean) => {
+        this.loadingInitial = state
+    }
+
+    createBook = async (book: Book) => {
+        this.loading = true
+        try {
+            await agent.Books.create(book)
+            runInAction(() => {
+                this.bookMap.set(book.id, book)
+                this.selectedBook = book
+                this.editMode = false
+                this.loading = false
+            })
+        } catch (error) {
+            console.log(error)
+            runInAction(() => {
+                this.loading = false
+            })
+        }
+    }
+
+    updateBook = async (book: Book) => {
+        this.loading = true
+        try {
+            await agent.Books.update(book)
+            runInAction(() => {
+                this.bookMap.set(book.id, book)
+                this.selectedBook = book
+                this.editMode = false
+                this.loading = false
+            })
+        } catch (error) {
+            console.log(error)
+            runInAction(() => {
+                this.loading = false
+            })
+        }
+    }
+
+    deleteBook = async (id: string) => {
+        this.loading = true
+        try {
+            await agent.Books.delete(id)
+            runInAction(() => {
+                this.bookMap.delete(id)
+                this.booksOwnedMap.delete(id)
+                this.loading = false
+            })
+        } catch (error) {
+            console.log(error)
+            runInAction(() => {
+                this.loading = false
+            })
+        }
+    }
+
+    setSubmittingBook = async (isbn: string) => {
+        this.loading = true
+        try {
+            await isbnAgent.requests.get&lt;IsbnBook>(isbn).then(response => {
+                const {book} = response
+                let newBook: Book = {
+                    id: "",
+                    title: book.title,
+                    author: book.authors[0],
+                    synopsys: book.synopsys,
+                    pages: book.pages,
+                    binding: book.binding,
+                    isbn13: book.isbn13,
+                    image: book.image,
+                    county: "carlow",
+                    isMarket: true,
+                    appUserId: store.userStore.user!.id
+                }
+                runInAction(() => {
+                    this.submittingBook = newBook
+                    this.loading = false
+                })
+            })
+        } catch (error) {
+            runInAction(() => {
+                this.loading = false
+            })
+        }
+    }
+
+    setCounty = (county: string) => {
+        this.county = county
+    }
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.html#.exports">exports</a></li></ul><h3>Interfaces</h3><ul><li><a href="AppUser.html">AppUser</a></li><li><a href="Book.html">Book</a></li><li><a href="BookSwap.html">BookSwap</a></li><li><a href="IsbnBook.html">IsbnBook</a></li><li><a href="Message.html">Message</a></li><li><a href="Profile.html">Profile</a></li><li><a href="ServerError.html">ServerError</a></li><li><a href="Store.html">Store</a></li><li><a href="SwapHistory.html">SwapHistory</a></li><li><a href="User.html">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#County">County</a></li><li><a href="global.html#history">history</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sun Apr 24 2022 15:50:55 GMT+0100 (Irish Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -7,6 +7,9 @@ import CustomTextInput from "../../app/common/form/CustomTextInput";
 import { useStore } from "../../app/stores/Store";
 import { UserForm } from "../../app/models/User";
 
+/**
+ * 
+ */
 export default observer(function RegisterForm() {
     const { userStore } = useStore()
     const [county, setCounty] = useState("")

@@ -1,3 +1,6 @@
+/**
+ * IsbnBook interface
+ */
 export interface IsbnBook {
     book: {
         publisher: string;

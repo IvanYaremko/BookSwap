@@ -9,7 +9,7 @@ public class AppUser : IdentityUser
     public string County { get; set; }
 
     public string Bio { get; set; }
-    
+
     public ICollection<Book> Books { get; set; }
 
     public ICollection<Photo> Photos { get; set; }

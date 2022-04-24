@@ -1,5 +1,8 @@
 namespace Application.Messages
 {
+    /// <summary>
+    /// The message data transfer class used for SignalR communications.
+    /// </summary>
     public class MessageDto
     {
         public int Id { get; set; }

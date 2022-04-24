@@ -12,7 +12,9 @@ import { Profile } from "../../../app/models/Profile";
 interface Props {
     setEditMode: (editMode: boolean) => void;
 }
-
+/**
+ * 
+ */
 export default observer(function ProfileEditForm({ setEditMode }: Props) {
     const { profileStore } = useStore();
     const { profile, updateProfile } = profileStore

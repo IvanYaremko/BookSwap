@@ -1,6 +1,8 @@
 import { Book } from "./Book";
 import { Photo } from "./Profile";
-
+/**
+ * AppUser interace
+ */
 export interface AppUser {
     id: string,
     county: string,

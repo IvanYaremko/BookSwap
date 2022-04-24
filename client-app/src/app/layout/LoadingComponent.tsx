@@ -6,6 +6,11 @@ interface Props {
     content?: string
 }
 
+/**
+ * Simple loading component
+ * @param param0 
+ * @returns 
+ */
 export default function LoadingComponent({ inverted = true, content = 'loading...' }: Props) {
     return (
         <Dimmer active={true} inverted={inverted}> 

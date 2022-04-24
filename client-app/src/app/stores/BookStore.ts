@@ -5,7 +5,9 @@ import { Book } from "../models/Book"
 import { IsbnBook } from "../models/IsbnBook"
 import { store } from "./Store";
 
-
+/**
+ * 
+ */
 export default class BookStore {
     bookMap = new Map<string, Book>()
     booksOwnedMap = new Map<String, Book>()

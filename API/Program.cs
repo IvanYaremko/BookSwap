@@ -23,6 +23,7 @@ builder.Services.AddControllers(opt =>
     {
         config.RegisterValidatorsFromAssemblyContaining<Create>();
     });
+builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 

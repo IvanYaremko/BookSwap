@@ -1,3 +1,6 @@
+/**
+ * Enum of counties
+ */
 export const enum County {
     Antrim,
     Armagh,

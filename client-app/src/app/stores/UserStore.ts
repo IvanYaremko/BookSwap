@@ -5,6 +5,9 @@ import { Profile } from "../models/Profile";
 import { User, UserForm } from "../models/User";
 import { store } from "./Store";
 
+/**
+ * 
+ */
 export default class UserStore {
     user: User | null = null
 

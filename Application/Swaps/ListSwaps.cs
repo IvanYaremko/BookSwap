@@ -9,6 +9,12 @@ using Persistence;
 
 namespace Application.Swaps
 {
+     /// <summary>
+    /// This class implements the CQRS principles.
+    /// The MediatR library handles the flow of control.
+    /// The Swap API Contoller  initialises a new ListSwaps.Query class.
+    /// The Handler class, as the name implies, handles the necessary logic to retrieve all BookSwaps from the database.
+    /// </summary>
     public class ListSwaps
     {
         public class Query: IRequest<List<BookSwap>> { }

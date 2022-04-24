@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: app/layout/App.tsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: app/layout/App.tsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useEffect } from 'react';
+import { Container } from 'semantic-ui-react';
+import NavBar from './NavBar';
+import { observer } from 'mobx-react-lite';
+import { Route, Switch, useLocation } from 'react-router-dom';
+import HomePage from '../../features/home/HomePage';
+import BookForm from '../../features/form/BookForm';
+import BookDetails from '../../features/details/BookDetails';
+import { ToastContainer } from 'react-toastify';
+import NotFound from '../../features/errors/NotFound';
+import IsbnForm from '../../features/form/IsbnForm';
+import { useStore } from '../stores/Store';
+import LoadingComponent from './LoadingComponent';
+import LoginForm from '../../features/auth/LoginForm';
+import RegisterForm from '../../features/auth/RegisterForm';
+import MarketDashboard from '../../features/dashboards/market/MarketDashboard';
+import SwapDashboard from '../../features/dashboards/swap/SwapDashboard';
+import RequestorBookList from '../../features/dashboards/swap/RequestorBookList';
+import SwapHistoryDashboard from '../../features/dashboards/history/SwapHistoryDashboard';
+import ProfileDashboard from '../../features/dashboards/profile/ProfileDashboard';
+import SwapHistoryDetails from '../../features/dashboards/history/SwapHistoryDetails';
+import PrivateRoute from './PrivateRoute';
+
+function App() {
+  const location = useLocation()
+  const { commonStore, userStore } = useStore()
+
+  // When logged in user receives JWT and the user is retrieved
+  useEffect(() => {
+    if (commonStore.token) {
+      userStore.getUser().finally(() => commonStore.setApplicationLoaded(true))
+    } else {
+      commonStore.setApplicationLoaded(true)
+    }
+  }, [commonStore, userStore])
+
+  if (!commonStore.applicationLoaded) return &lt;LoadingComponent content='loading application' />
+
+  return (
+    &lt;>
+      &lt;ToastContainer position='bottom-right' hideProgressBar />
+      &lt;Route exact path='/' component={HomePage} />
+      &lt;Route exact path='/login' component={LoginForm} />
+      &lt;Route exact path='/register' component={RegisterForm} />
+      &lt;Route
+        path={['/books', '/books/:id', '/edit/:id', '/edit',
+          '/createBook', '/server-error', '/not-found',
+          '/swaps', '/requestor/:id', '/history',
+          '/profile/:username', '/history/:swapId']}
+        render={() => (
+          &lt;>
+            &lt;NavBar />
+            &lt;Container style={{ marginTop: '10em' }}>
+              &lt;Switch>
+                &lt;PrivateRoute exact path='/books' component={MarketDashboard} />
+                &lt;PrivateRoute path='/books/:id' component={BookDetails} />
+                &lt;PrivateRoute key={location.key} path={['/edit/:id', '/edit',]} component={BookForm} />
+                &lt;PrivateRoute path={'/createBook'} component={IsbnForm} />
+                &lt;PrivateRoute path={'/profile/:username'} component={ProfileDashboard} />
+                &lt;PrivateRoute path={'/requestor/:id'} component={RequestorBookList} />
+                &lt;PrivateRoute path={'/swaps'} component={SwapDashboard} />
+                &lt;PrivateRoute exact path={'/history'} component={SwapHistoryDashboard} />
+                &lt;PrivateRoute path='/history/:swapId' component={SwapHistoryDetails} />
+                &lt;Route component={NotFound} />
+              &lt;/Switch>
+            &lt;/Container>
+          &lt;/>
+        )}
+      />
+    &lt;/>
+  );
+}
+
+/**
+ * 
+ */
+export default observer(App);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.html#.exports">exports</a></li></ul><h3>Interfaces</h3><ul><li><a href="AppUser.html">AppUser</a></li><li><a href="Book.html">Book</a></li><li><a href="BookSwap.html">BookSwap</a></li><li><a href="IsbnBook.html">IsbnBook</a></li><li><a href="Message.html">Message</a></li><li><a href="Profile.html">Profile</a></li><li><a href="ServerError.html">ServerError</a></li><li><a href="Store.html">Store</a></li><li><a href="SwapHistory.html">SwapHistory</a></li><li><a href="User.html">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#County">County</a></li><li><a href="global.html#history">history</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sun Apr 24 2022 15:50:55 GMT+0100 (Irish Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

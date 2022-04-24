@@ -6,7 +6,9 @@ import App from './app/layout/App'
 import './app/layout/styles.css'
 import { store, StoreContext } from './app/stores/Store';
 import {createBrowserHistory} from 'history'
-
+/**
+ * 
+ */
 export const history = createBrowserHistory()
 
 ReactDOM.render(

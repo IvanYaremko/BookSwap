@@ -3,7 +3,9 @@ import { SyntheticEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Card, Grid, Image, Tab } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/Store";
-
+/**
+ * 
+ */
 export default observer(function ProfileBooksOwned() {
     const { bookStore, profileStore } = useStore()
     const { booksOwnedMap, deleteBook, loading } = bookStore

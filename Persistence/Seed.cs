@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Persistence
 {
-
+    /// <summary>
+    /// This class is used to as seed data for the data store.
+    /// </summary>
     public class Seed
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)

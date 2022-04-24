@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: features/dashboards/profile/ProfilePhotos.tsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: features/dashboards/profile/ProfilePhotos.tsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { observer } from "mobx-react-lite";
+import { SyntheticEvent, useState } from "react";
+import { Button, Card, Grid, Header, Image, Tab } from "semantic-ui-react";
+import { Photo } from "../../../app/models/Profile";
+import { useStore } from "../../../app/stores/Store";
+import UploadWidget from "./Upload/UploadWidget";
+/**
+ * 
+ */
+export default observer(function ProfilePhotos() {
+    const { profileStore } = useStore()
+    const { profile, isCurrentUser, uploadPhoto, isUploading, isMainLoading, setMain, deletePhoto } = profileStore
+    const [photoMode, setPhotoMode] = useState(false)
+    const [target, setTarget] = useState("")
+
+    function handleUpload(file: any) {
+        uploadPhoto(file).then(() => setPhotoMode(false))
+    }
+
+    function handleSetMain(e: SyntheticEvent&lt;HTMLButtonElement>, photo: Photo) {
+        setTarget(e.currentTarget.name)
+        setMain(photo)
+    }
+
+    function handleDelete(e: SyntheticEvent&lt;HTMLButtonElement>, photo: Photo) {
+        setTarget(e.currentTarget.name);
+        deletePhoto(photo)
+    }
+
+    return (
+        &lt;Tab.Pane>
+            &lt;Grid>
+                &lt;Grid.Column width={16}>
+                    &lt;Header
+                        floated="left"
+                        content="Profile photos"
+                        icon='image' />
+                    {isCurrentUser &amp;&amp; (
+                        &lt;Button
+                            floated="right"
+                            basic
+                            content={photoMode ? 'Cancel' : 'Add photo'}
+                            onClick={() => setPhotoMode(!photoMode)}
+                        />
+                    )}
+                &lt;/Grid.Column>
+                &lt;Grid.Column width={16}>
+                    {photoMode
+                        ? (
+                            &lt;UploadWidget uploadPhoto={handleUpload} loading={isUploading} />
+                        )
+                        : (
+                            &lt;Card.Group itemsPerRow={5} >
+                                {profile?.photos?.map((photo: Photo) => (
+                                    &lt;Card key={photo.id}>
+                                        &lt;Image src={photo.url} />
+                                        {isCurrentUser &amp;&amp; (
+                                            &lt;Button.Group fluid widths={2}> 
+                                                &lt;Button
+                                                    basic
+                                                    color="green"
+                                                    content="Main"
+                                                    name={"unique" + photo.id}
+                                                    disabled={photo.isMain}
+                                                    onClick={event => handleSetMain(event, photo)}
+                                                    loading={target === "unique" + photo.id &amp;&amp; isMainLoading}
+                                                />
+                                                &lt;Button
+                                                    basic
+                                                    color="red"
+                                                    icon="trash"
+                                                    name={photo.id}
+                                                    loading={target === photo.id &amp;&amp; isMainLoading}
+                                                    onClick={event => handleDelete(event, photo)}
+                                                    disabled={photo.isMain}
+                                                />
+                                            &lt;/Button.Group>
+                                        )}
+                                    &lt;/Card>
+                                ))}
+                            &lt;/Card.Group>
+                        )}
+                &lt;/Grid.Column>
+            &lt;/Grid>
+
+
+        &lt;/Tab.Pane>
+    )
+})</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.html#.exports">exports</a></li></ul><h3>Interfaces</h3><ul><li><a href="AppUser.html">AppUser</a></li><li><a href="Book.html">Book</a></li><li><a href="BookSwap.html">BookSwap</a></li><li><a href="IsbnBook.html">IsbnBook</a></li><li><a href="Message.html">Message</a></li><li><a href="Profile.html">Profile</a></li><li><a href="ServerError.html">ServerError</a></li><li><a href="Store.html">Store</a></li><li><a href="SwapHistory.html">SwapHistory</a></li><li><a href="User.html">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#County">County</a></li><li><a href="global.html#history">history</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sun Apr 24 2022 15:50:55 GMT+0100 (Irish Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

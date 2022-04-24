@@ -6,7 +6,9 @@ import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { Book } from "../../../app/models/Book";
 import { SwapRequests } from "../../../app/models/SwapRequests";
 import { useStore } from "../../../app/stores/Store";
-
+/**
+ * 
+ */
 export default observer(function RequestorBookList() {
     const history = useHistory()
     const { swapStore, bookStore } = useStore()

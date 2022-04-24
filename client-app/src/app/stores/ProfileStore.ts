@@ -3,6 +3,9 @@ import agent from "../api/agent";
 import { Photo, Profile } from "../models/Profile";
 import { store } from "./Store";
 
+/**
+ * 
+ */
 export default class ProfileStore {
     profile: Profile | null = null
     loadingProfile = false

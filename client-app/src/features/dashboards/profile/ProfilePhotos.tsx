@@ -4,7 +4,9 @@ import { Button, Card, Grid, Header, Image, Tab } from "semantic-ui-react";
 import { Photo } from "../../../app/models/Profile";
 import { useStore } from "../../../app/stores/Store";
 import UploadWidget from "./Upload/UploadWidget";
-
+/**
+ * 
+ */
 export default observer(function ProfilePhotos() {
     const { profileStore } = useStore()
     const { profile, isCurrentUser, uploadPhoto, isUploading, isMainLoading, setMain, deletePhoto } = profileStore

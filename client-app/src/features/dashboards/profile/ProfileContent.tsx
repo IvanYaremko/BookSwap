@@ -4,7 +4,9 @@ import ProfileDetails from "./ProfileDetails";
 import ProfileOwnedBooks from "./ProfileOwnedBooks";
 import ProfilePhotos from "./ProfilePhotos";
 
-
+/**
+ * 
+ */
 export default observer(function ProfileContent() {
     const panes = [
         { menuItem: 'Details', render: () => <ProfileDetails /> },

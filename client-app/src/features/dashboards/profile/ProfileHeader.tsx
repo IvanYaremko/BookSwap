@@ -1,7 +1,9 @@
 import { observer } from "mobx-react-lite";
 import { Grid, Header, Icon, Item, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/Store";
-
+/**
+ * 
+ */
 export default observer(function ProfileHeader() {
     const { bookStore, swapStore, profileStore } = useStore()
     const { booksOwnedMap } = bookStore

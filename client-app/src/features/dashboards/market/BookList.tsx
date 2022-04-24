@@ -4,7 +4,9 @@ import { Link } from "react-router-dom";
 import { Item, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/Store";
 
-
+/**
+ * Component to render books for the marketplace
+ */
 export default observer(function BookList() {
     const { bookStore, userStore } = useStore()
     const { bookMap, county } = bookStore
@@ -15,6 +17,7 @@ export default observer(function BookList() {
         <>
             <Segment>
                 <Item.Group divided>
+                    {/* Convert Map to array and filter for county and filter for user owned books */}
                     {Array.from(bookMap.values()).filter(book => book.county.toLowerCase() === county?.toLowerCase() && book.appUserId !== userStore.user?.id).map(book => (
                         <Item key={book.id}>
                             <Item.Image

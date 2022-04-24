@@ -5,6 +5,9 @@ import { Button, Grid, Header } from "semantic-ui-react";
 import CustomTextInput from "../../app/common/form/CustomTextInput";
 import { useStore } from "../../app/stores/Store";
 
+/**
+ * 
+ */
 export default observer(function LoginForm() {
     const { userStore } = useStore()
 

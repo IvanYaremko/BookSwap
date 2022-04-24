@@ -5,6 +5,13 @@ using Persistence;
 
 namespace Application.Swaps
 {
+    /// <summary>
+    /// This class implements the CQRS principles.
+    /// The MediatR library handles the flow of control.
+    /// The Swap API Contoller initialises a new ListSwapsIRequested.Query class,
+    /// passing along the AppUser id.
+    /// The Handler class handles the necessary logic to retrieve the SwapRequestsDto objects from the database.
+    /// </summary>
     public class ListSwapsIRequested
     {
         public class Query : IRequest<List<SwapRequestsDto>>
@@ -21,6 +28,13 @@ namespace Application.Swaps
                 _context = context;
             }
 
+            /// <summary>
+            /// This method returns all the BookSwaps that the user is the requesting appUser.
+            /// The return list is in the form of a SwapRequest DTO.
+            /// </summary>
+            /// <param name="request"></param>
+            /// <param name="cancellationToken"></param>
+            /// <returns></returns> 
             public async Task<List<SwapRequestsDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var users = await _context.Users.Include(user => user.Books).Include(user => user.Photos).ToListAsync();

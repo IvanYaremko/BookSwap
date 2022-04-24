@@ -2,7 +2,9 @@ import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
 import {  Grid, Icon, Image, Item, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/Store";
-
+/**
+ * 
+ */
 export default observer(function PastSwapsList() {
     const { swapStore, userStore } = useStore()
     const { historyMap } = swapStore

@@ -3,7 +3,9 @@ import { useState } from "react";
 import { Button, Grid, Tab } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/Store";
 import ProfileEditForm from "./ProfileEditForm";
-
+/**
+ * 
+ */
 export default observer(function ProfileDetails() {
     const { profileStore } = useStore()
     const { profile, isCurrentUser } = profileStore

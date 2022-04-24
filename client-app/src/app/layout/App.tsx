@@ -25,6 +25,7 @@ function App() {
   const location = useLocation()
   const { commonStore, userStore } = useStore()
 
+  // When logged in user receives JWT and the user is retrieved
   useEffect(() => {
     if (commonStore.token) {
       userStore.getUser().finally(() => commonStore.setApplicationLoaded(true))
@@ -70,4 +71,7 @@ function App() {
   );
 }
 
+/**
+ * 
+ */
 export default observer(App);

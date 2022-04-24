@@ -5,7 +5,9 @@ import { SwapRequests } from "../models/SwapRequests";
 import { UserBook } from "../models/User";
 
 
-
+/**
+ * 
+ */
 export default class SwapStore {
     // Map of all the swaps
     swapMap = new Map<string, BookSwap>()

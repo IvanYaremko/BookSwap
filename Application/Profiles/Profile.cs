@@ -3,6 +3,9 @@ using Domain;
 
 namespace Application.Profiles
 {
+    /// <summary>
+    /// This class is used as a DTO object to transfer the AppUsers details as a profile.
+    /// </summary>
     public class Profile
     {
         public string UserName { get; set; }

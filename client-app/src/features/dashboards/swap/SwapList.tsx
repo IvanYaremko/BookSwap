@@ -3,7 +3,9 @@ import React from "react";
 import { Button, Item, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/Store";
 
-
+/**
+ * 
+ */
 export default observer(function SwapList() {
     const { swapStore } = useStore()
     const { myRequestsMap, deleteSwap } = swapStore

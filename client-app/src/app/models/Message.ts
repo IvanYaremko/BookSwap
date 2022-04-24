@@ -1,3 +1,6 @@
+/**
+ * Message model
+ */
 export interface Message 
 {
     id: number,

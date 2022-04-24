@@ -3,6 +3,9 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signal
 import { makeAutoObservable, runInAction } from "mobx";
 import { store } from "./Store";
 
+/**
+ * 
+ */
 export default class MessageStore {
     messages: Message[] = []
     hubConnection: HubConnection | null = null

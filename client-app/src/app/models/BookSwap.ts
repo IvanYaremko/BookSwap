@@ -1,3 +1,6 @@
+/**
+ * BookSwap model
+ */
 export interface BookSwap {
     id: string,
     ownerID: string,

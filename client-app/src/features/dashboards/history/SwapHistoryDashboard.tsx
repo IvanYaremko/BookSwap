@@ -4,7 +4,9 @@ import { Grid} from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/Store";
 import PastSwapsList from "./PastSwapsList";
-
+/**
+ * 
+ */
 export default observer(function SwapHistoryDashboard() {
     const { swapStore, userStore } = useStore()
     const { loadHistory, loading, historyMap } = swapStore

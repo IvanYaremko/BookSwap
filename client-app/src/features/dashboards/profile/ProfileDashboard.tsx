@@ -6,7 +6,9 @@ import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/Store";
 import ProfileContent from "./ProfileContent";
 import ProfileHeader from "./ProfileHeader";
-
+/**
+ * 
+ */
 export default observer(function ProfileDashboard() {
     const { username } = useParams<{ username: string }>()
     const { profileStore, bookStore, userStore } = useStore();

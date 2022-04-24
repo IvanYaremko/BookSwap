@@ -3,7 +3,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Container, Header, Segment } from "semantic-ui-react";
 import { useStore } from "../../app/stores/Store";
-
+/**
+ * 
+ */
 export default observer(function HomePage() {
     const { userStore } = useStore()
     return (

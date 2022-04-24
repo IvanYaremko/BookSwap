@@ -7,6 +7,9 @@ interface Props extends RouteProps {
     component: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
 }
 
+/**
+ * Private route that checks if user is logged in if not routed back to homepage
+ */
 export default observer(function PrivateRoute({ component: Component, ...rest }: Props) {
     const { userStore: { checkLogin } } = useStore();
     return (

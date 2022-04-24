@@ -6,7 +6,9 @@ import { Header, Icon } from 'semantic-ui-react'
 interface Props {
     setFiles: (files: any) => void
 }
-
+/**
+ * 
+ */
 export default function Dropzone({ setFiles }: Props) {
     const styles = {
         border: "dashed 3px #000000",

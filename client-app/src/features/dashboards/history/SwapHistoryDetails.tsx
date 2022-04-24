@@ -4,7 +4,9 @@ import { useParams } from "react-router-dom";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/Store";
 import SwapChat from "./SwapChat";
-
+/**
+ * 
+ */
 export default observer(function SwapHistoryDetails() {
     const {swapStore } = useStore()
     const { selectedSwap: swap, loadSwap, loadingInitial, clearSelectedSwap } = swapStore

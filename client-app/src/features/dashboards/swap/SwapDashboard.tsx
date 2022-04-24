@@ -6,7 +6,9 @@ import { Grid } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import UserRequestList from "./UserRequestList";
 
-
+/**
+ * 
+ */
 export default observer(function SwapDashboard() {
     const { swapStore, bookStore, userStore } = useStore()
     const { loadSwaps, loadRequested, loadMyRequests, loading, loadingInitial, myRequestsMap, requestedMap } = swapStore

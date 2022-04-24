@@ -8,6 +8,13 @@ using Persistence;
 
 namespace Application.Swaps
 {
+    /// <summary>
+    /// This class implements the CQRS principles.
+    /// The MediatR library handles the flow of control.
+    /// The Swap API Contoller initialises a new CreateSwap.Command class,
+    /// passing along the BookSwap object to be added to the Database.
+    /// The Handler class handles the necessary logic to persist the BookSwap object into the database.
+    /// </summary>
     public class CreateSwap
     {
         public class Command : IRequest

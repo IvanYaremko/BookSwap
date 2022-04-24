@@ -13,7 +13,7 @@ const sleep = (delay: number) => {
 }
 
 axios.interceptors.response.use(async response => {
-    await sleep(1000);
+    await sleep(500);
     return response;
 })
 
@@ -83,5 +83,7 @@ const agent = {
     Swaps,
     Profiles
 }
-
+/**
+ * Agent file
+ */
 export default agent
